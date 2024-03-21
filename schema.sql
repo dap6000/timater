@@ -1,0 +1,4 @@
+CREATE TABLE greetings (
+    who VARCHAR(255) NOT NULL UNIQUE,
+    num INT UNSIGNED NOT NULL
+);
