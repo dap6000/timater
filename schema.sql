@@ -1,3 +1,7 @@
+DROP DATABASE IF EXISTS timater;
+CREATE DATABASE timater;
+USE timater;
+
 CREATE TABLE settings (
     id INT UNIQUE,
     # Length for a single pomodoro session in minutes.
@@ -30,7 +34,7 @@ VALUES (1, 25, 5, 30, 4, 4, 1, 1)
 ;
 
 CREATE TABLE tasks (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     description VARCHAR(255) NOT NULL,
     priority SET('Cold', 'Warm', 'Hot', 'Urgent') DEFAULT 'Warm',
     size SET('Short', 'Tall', 'Grande', 'Venti', 'Big Gulp') DEFAULT 'Tall',
@@ -44,7 +48,7 @@ CREATE TABLE tasks (
 );
 
 CREATE TABLE pomodoro_sessions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     started_at DATETIME NOT NULL,
     ended_at DATETIME NOT NULL,
     timezone VARCHAR(32) NOT NULL,
@@ -56,6 +60,35 @@ CREATE TABLE splits (
     id INT AUTO_INCREMENT PRIMARY KEY,
     parent_id INT UNSIGNED NOT NULL,
     child_id INT UNSIGNED NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_splits_parent (parent_id) REFERENCES tasks.id,
-    CONSTRAINT FOREIGN KEY fk_splits_child (child_id) REFERENCES tasks.id
+    FOREIGN KEY fk_splits_parent (parent_id) REFERENCES tasks(id),
+    FOREIGN KEY fk_splits_child (child_id) REFERENCES tasks(id)
 );
+
+DROP USER IF EXISTS 'timater'@'%';
+CREATE USER 'timater'@'%' IDENTIFIED BY 'timater1234';
+
+GRANT SELECT ON *.* TO 'timater'@'%';
+
+GRANT
+    CREATE ROUTINE,
+        LOCK TABLES,
+        CREATE TEMPORARY TABLES,
+        SHOW VIEW,
+        EXECUTE,
+        GRANT OPTION,
+        REFERENCES,
+        SELECT,
+        DROP,
+        TRIGGER,
+        CREATE,
+        EVENT,
+        ALTER ROUTINE,
+        INSERT,
+        UPDATE,
+        CREATE VIEW,
+        ALTER,
+        INDEX,
+        DELETE
+        ON `timater`.* TO 'timater'@'%';
+
+FLUSH PRIVILEGES;
