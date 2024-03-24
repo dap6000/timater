@@ -16,7 +16,8 @@ CREATE TABLE settings (
     # The goal is to get better at breaking larger tasks into manageable chunks.
     rock_breaking_threshold INT UNSIGNED NOT NULL,
     use_task_priority BOOLEAN NOT NULL,
-    use_task_size BOOLEAN NOT NULL
+    use_task_size BOOLEAN NOT NULL,
+    timezone VARCHAR(32) NOT NULL
 );
 
 INSERT INTO settings
@@ -28,9 +29,10 @@ INSERT INTO settings
     long_rest_threshold,
     rock_breaking_threshold,
     use_task_priority,
-    use_task_size
+    use_task_size,
+    timezone
 )
-VALUES (1, 25, 5, 30, 4, 4, 1, 1)
+VALUES (0, 25, 5, 30, 4, 4, 1, 1, 'America/Chicago')
 ;
 
 CREATE TABLE tasks (
@@ -38,11 +40,14 @@ CREATE TABLE tasks (
     description VARCHAR(255) NOT NULL,
     priority SET('Cold', 'Warm', 'Hot', 'Urgent') DEFAULT 'Warm',
     size SET('Short', 'Tall', 'Grande', 'Venti', 'Big Gulp') DEFAULT 'Tall',
-    status SET('Waiting', 'In Progress', 'Completed', 'Split') DEFAULT 'Waiting',
-    begun_at DATETIME NOT NULL,
-    completed_at DATETIME NOT NULL,
+    status SET('Waiting', 'In Progress', 'Completed', 'Split', 'Paused', 'Paused Active') DEFAULT 'Waiting',
+    begun_at DATETIME DEFAULT NULL,
+    completed_at DATETIME DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    modified_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     timezone VARCHAR(32) NOT NULL,
-    session_count INT UNSIGNED NOT NULL,
+    session_count INT UNSIGNED NOT NULL DEFAULT 0,
+    time_on_task INT UNSIGNED AS ((TO_SECONDS(completed_at) - TO_SECONDS(begun_at)) / 60),
     INDEX i_tasks_begun_at (begun_at),
     INDEX i_tasks_completed_at (completed_at)
 );
@@ -51,7 +56,9 @@ CREATE TABLE pomodoro_sessions (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     started_at DATETIME NOT NULL,
     ended_at DATETIME NOT NULL,
+    break_duration INT UNSIGNED NOT NULL,
     timezone VARCHAR(32) NOT NULL,
+    duration INT UNSIGNED AS ((TO_SECONDS(ended_at) - TO_SECONDS(started_at)) / 60),
     INDEX i_ps_started_at (started_at),
     INDEX i_ps_ended_at (ended_at)
 );
@@ -64,11 +71,21 @@ CREATE TABLE splits (
     FOREIGN KEY fk_splits_child (child_id) REFERENCES tasks(id)
 );
 
+CREATE TABLE pauses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    task_id INT UNSIGNED NOT NULL,
+    paused_at DATETIME NOT NULL,
+    resumed_at DATETIME DEFAULT NULL,
+    timezone VARCHAR(32) NOT NULL,
+    FOREIGN KEY fk_pauses_parent (task_id) REFERENCES tasks(id)
+);
+
 DROP USER IF EXISTS 'timater'@'%';
 CREATE USER 'timater'@'%' IDENTIFIED BY 'timater1234';
 
 GRANT SELECT ON *.* TO 'timater'@'%';
 
+# TODO Can we just use GRANT ALL here?
 GRANT
     CREATE ROUTINE,
         LOCK TABLES,
