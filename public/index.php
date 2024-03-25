@@ -1,17 +1,20 @@
 <?php
+
+use App\Models\DB;
+use App\Models\TasksModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-require_once __DIR__ . '/../utils/db.php';
-
 CONST SETTING_ID = 0;
 
 // Instantiate App
 $app = AppFactory::create();
 
+// Add parser for JSON data in request bodies.
+$app->addBodyParsingMiddleware();
 // Add error middleware
 $app->addErrorMiddleware(true, true, true);
 
@@ -22,23 +25,9 @@ $app->get('/', function (Request $request, Response $response) {
 });
 
 $app->get('/hello/{name}', function (Request $request, Response $response, $args) {
-    $pdo = db();
+    $pdo = DB::makeConnection();
     $name = $args['name'];
     $response->getBody()->write("<p>Hello, $name!</p>");
-    if ($pdo) {
-        $upsert_sql = 'INSERT INTO greetings (who, num) VALUES (?, 1) ON DUPLICATE KEY UPDATE num = num + 1;';
-        $stmt = $pdo->prepare($upsert_sql);
-        $stmt->execute([$name]);
-        $select_sql = 'SELECT num FROM greetings WHERE who = ?;';
-        $stmt = $pdo->prepare($select_sql);
-        $stmt->execute([$name]);
-        $result = $stmt->fetch(PDO::FETCH_OBJ);
-        if ($result->num > 1) {
-            $response->getBody()->write("<p>It's nice to see you again. We have greeted you {$result->num} times.</p>");
-        } else {
-            $response->getBody()->write('This is our first time meeting you!');
-        }
-    }
     
     return $response;
 });
@@ -72,7 +61,6 @@ function makeTask(\Faker\Generator $faker, DateTimeImmutable $task_complete, arr
         ':begun_at' => $task_start->format('Y-m-d H:i:s'),
         ':completed_at' => $task_complete->format('Y-m-d H:i:s'),
         ':timezone' => $tz,
-        ':session_count' => 1,
     ];
     return $task_struct;
 }
@@ -100,7 +88,7 @@ function makePomodoroSession(DateTimeImmutable $start, mixed $current_settings, 
 
 $app->get('/db/seed', function (Request $request, Response $response) {
     $seed_start = time();
-    $pdo = db();
+    $pdo = DB::makeConnection();
     $settings_sql = 'SELECT * FROM settings WHERE id = ?';
     $stmt = $pdo->prepare($settings_sql);
     $current_settings = $stmt->execute([SETTING_ID]) ? $stmt->fetch(PDO::FETCH_OBJ) : null;
@@ -118,8 +106,7 @@ $app->get('/db/seed', function (Request $request, Response $response) {
             status,
             begun_at,
             completed_at,
-            timezone,
-            session_count
+            timezone
         ) VALUES (
             :description,
             :priority,
@@ -127,11 +114,12 @@ $app->get('/db/seed', function (Request $request, Response $response) {
             :status,
             :begun_at,
             :completed_at,
-            :timezone,
-            :session_count
+            :timezone
         )';
+    $upsert_active_task_sql = 'INSERT INTO active_task (id, task_id) VALUES (0, :task_id0) ON DUPLICATE KEY UPDATE task_id = :task_id1;';
     $create_ps_stmt = $pdo->prepare($create_ps_sql);
     $create_task_stmt = $pdo->prepare($create_task_sql);
+    $upsert_active_task_stmt = $pdo->prepare($upsert_active_task_sql);
 
     if ($current_settings) {
         // counter for number of pomodoro sessions so far today
@@ -172,7 +160,8 @@ $app->get('/db/seed', function (Request $request, Response $response) {
                 $create_new_task = true;
             }
             if ($task_struct[':completed_at'] > $ps_struct[':ended_at']) {
-                $task_struct[':session_count']++;
+                //$task_struct[':session_count']++;
+                // INSERT INTO pomodoro_tasks ...
                 $rest_duration = $current_settings->short_rest_duration;
                 if ($ps_count % $current_settings->long_rest_threshold === 0) {
                     $rest_duration = $current_settings->long_rest_duration;
@@ -206,5 +195,76 @@ $app->get('/db/seed', function (Request $request, Response $response) {
 
     return $response;
 });
+
+// Create Task
+$app->post('/tasks/add', function (Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    /*
+     * string description - Text displayed as the task
+       string priority - One of ['Cold', 'Warm', 'Hot', 'Urgent']
+       string size - One of ['Short', 'Tall', 'Grande', 'Venti', 'Big Gulp']
+       string status - One of ['Waiting', 'In Progress', 'Completed', 'Split', 'Paused'], (defaults to Waiting if not in dev environment)
+       string begunAt - A date + time string
+       string completedAt - A date + time string (only processed in dev environment)
+       string timezone - A PHP Timezone string
+     */
+});
+// Edit Task
+$app->put('/tasks/edit/{id}', function (Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    /*…*/
+});
+// Split Task
+$app->post('/tasks/split/{id}', function (Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    /*…*/
+});
+// List Available Tasks
+$app->get('/tasks/available', function (Request $request, Response $response, array $args) {
+    // TODO Put a service to work here
+    $tasksModel = new TasksModel();
+    $availableTasks = $tasksModel->getAvailable();
+    $response->getBody()->write(json_encode($availableTasks));
+    return $response
+        ->withHeader('content-type', 'application/json')
+        ->withStatus(200);
+});
+// Assign Task
+$app->post('/tasks/assign/{task_id}', function (Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    /*…*/
+});
+// Pause Task
+$app->post('/tasks/pause/{task_id}', function (Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    /*…*/
+});
+// Complete Task
+$app->post('/tasks/complete/{task_id}', function (Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    /*…*/
+});
+// Start Session
+$app->post('/pomodoro/start', function (Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    /*…*/
+});
+// End Session
+$app->post('/pomodoro/end/{id}', function (Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    /*…*/
+});
+// Quit
+$app->post('/pomodoro/quit', function (Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    /*…*/
+});
+
+$app->get('/test', function (Request $request, Response $response, array $args) {
+    $tasksModel = new TasksModel();
+    $tasksModel->begin(7, new DateTimeImmutable(), 'Invalid String');
+    /*…*/
+});
+
 
 $app->run();

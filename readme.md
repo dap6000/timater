@@ -133,11 +133,7 @@ Assignment involves:
  - Set `status` to 'In Progress'
    - If `status` was "Paused" set `resumed_at` in associated `pauses` record
  - Set `begun_at` to now if currently NULL, leave any existing non-null values
- - Increment `session_count`
-
-There is no actual FK relationship between tasks and sessions. If we need
-to sort out such a relationship, we can ues the `begun_at`, `completed_at`,
-`started_at`, and `ended_at` columns.
+ - Create `pomodoro_tasks` record
 
 ### Pause Task
 
@@ -150,8 +146,7 @@ for the next pomodoro session. In any case, we need to account for this.
 
 Pausing a task involves:
  - Set `status` to 'Paused'
- - Decrement `session_count`
- - If ID matches any current `pauses` records, set its `resumed_at` to now (handles Paused Active case)
+ - Set pomodoro_tasks.unassigned_at in associated record
  - Created record in `pauses` table with `task_id`, `paused_at`, `timezone`
 
 ### Complete Task
@@ -172,9 +167,8 @@ Backend processing involves setting an `ended_at` value on the record.
 This ends the pomodoro session without starting a break timer. Use case is meetings,
 lunch breaks, end of day, or anything that stops work but isn't beholden to pomodoro
 break duration rules. The backend processes follow the same logic for ending the
-pomodoro session. Any currently active tasks get treated as a special case of pause:
+pomodoro session. Any currently active tasks get treated as a pause:
 
- - Set `status` to 'Paused Active'
  - Created record in `pauses` table with `task_id`, `paused_at`, `timezone`
 
 ## Reporting
