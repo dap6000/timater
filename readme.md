@@ -715,8 +715,11 @@ Tasks paused for an excessive amount of time
 
 # TODO
 
-- Update example JSON request and response blocks
-- Implement csrf
+- Dependency injection
 - Build reports
-- Dependency injection?
+- Update example JSON request and response blocks
+- csrf?
+- JWT?
 - Tests?
+- Logging?
+- Rate limits?

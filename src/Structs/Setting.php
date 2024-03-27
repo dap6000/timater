@@ -50,8 +50,8 @@ readonly class Setting implements Struct
             $row['long_rest_duration'],
             $row['long_rest_threshold'],
             $row['rock_breaking_threshold'],
-            $row['use_task_priority'],
-            $row['use_task_size'],
+            (bool)$row['use_task_priority'],
+            (bool)$row['use_task_size'],
             $row['timezone'],
         );
     }

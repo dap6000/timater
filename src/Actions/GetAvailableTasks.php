@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Models\DB;
 use App\Models\TasksModel;
 use App\Structs\Task;
 use Exception;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use PDO;
 
 /**
  *
@@ -17,36 +15,27 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 final class GetAvailableTasks extends BaseAction
 {
     /**
-     * @param Request $request
-     * @param Response $response
+     * @param int $userId
+     * @param array $body
      * @param array $args
+     * @param PDO $pdo
      * @return array
      * @throws Exception
      */
     public function getData(
-        Request $request,
-        Response $response,
-        array $args
+        int $userId,
+        array $body,
+        array $args,
+        PDO $pdo,
     ): array {
-        // TODO DI
-        $pdo = DB::makeConnection();
-        $body = (array)$request->getParsedBody();
-        $userId = intval($body['user']['id'] ?? 0);
-        try {
-            $pdo->beginTransaction();
-            $tasksModel = new TasksModel(pdo: $pdo);
-            $available = $tasksModel->getAvailable(userId: $userId);
-            $pdo->commit();
+        $tasksModel = new TasksModel(pdo: $pdo);
+        $available = $tasksModel->getAvailable(userId: $userId);
 
-            return [
-                'tasks' => array_map(
-                    fn(Task $t) => $t->toArray(),
-                    $available
-                )
-            ];
-        } catch (Exception $exception) {
-            $pdo->rollBack();
-            throw $exception;
-        }
+        return [
+            'tasks' => array_map(
+                fn(Task $t) => $t->toArray(),
+                $available
+            )
+        ];
     }
 }

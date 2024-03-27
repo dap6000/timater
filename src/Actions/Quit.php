@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use Exception;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use PDO;
 
 /**
  *
@@ -14,18 +13,20 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 final class Quit extends EndPomodoroSession
 {
     /**
-     * @param Request $request
-     * @param Response $response
+     * @param int $userId
+     * @param array $body
      * @param array $args
-     * @return string[]
+     * @param PDO $pdo
+     * @return array
      * @throws Exception
      */
     public function getData(
-        Request $request,
-        Response $response,
-        array $args
+        int $userId,
+        array $body,
+        array $args,
+        PDO $pdo,
     ): array {
-        parent::getData($request, $response, $args);
+        parent::getData($userId, $body, $args, $pdo);
         return ['message' => 'Goodbye!'];
     }
 }
