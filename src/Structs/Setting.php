@@ -1,13 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Structs;
 
-use DateTimeImmutable;
+use App\Structs\Interfaces\Struct;
+use Exception;
 
+/**
+ *
+ */
 readonly class Setting implements Struct
 {
-    const int ID = 0;
+    /**
+     * @param int $userId
+     * @param int $sessionDuration
+     * @param int $shortRestDuration
+     * @param int $longRestDuration
+     * @param int $longRestThreshold
+     * @param int $rockBreakingThreshold
+     * @param bool $useTaskPriority
+     * @param bool $useTaskSize
+     * @param string $timezone
+     */
     public function __construct(
+        public int $userId,
         public int $sessionDuration,
         public int $shortRestDuration,
         public int $longRestDuration,
@@ -16,12 +33,18 @@ readonly class Setting implements Struct
         public bool $useTaskPriority,
         public bool $useTaskSize,
         public string $timezone,
-        public DateTimeImmutable $createdAt,
-        public DateTimeImmutable $modifiedAt,
-    ) {}
+    ) {
+    }
 
-    public static function fromRow(array $row): self {
+    /**
+     * @param array $row
+     * @return self
+     * @throws Exception
+     */
+    public static function fromRow(array $row): self
+    {
         return new Setting(
+            $row['user_id'],
             $row['session_duration'],
             $row['short_rest_duration'],
             $row['long_rest_duration'],
@@ -30,13 +53,36 @@ readonly class Setting implements Struct
             $row['use_task_priority'],
             $row['use_task_size'],
             $row['timezone'],
-            $row['created_at'],
-            $row['modified_at'],
         );
     }
 
-    public function toEditParams(): array {
+    /**
+     * @param array $a
+     * @param array $u
+     * @return self
+     */
+    public static function fromRequest(array $a, array $u): self
+    {
+        return new Setting(
+            $u['id'],
+            $a['session_duration'],
+            $a['short_rest_duration'],
+            $a['long_rest_duration'],
+            $a['long_rest_threshold'],
+            $a['rock_breaking_threshold'],
+            $a['use_task_priority'],
+            $a['use_task_size'],
+            $a['timezone'],
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function toEditParams(): array
+    {
         return [
+            ':user_id' => $this->userId,
             ':session_duration' => $this->sessionDuration,
             ':short_rest_duration' => $this->shortRestDuration,
             ':long_rest_duration' => $this->longRestDuration,
@@ -45,6 +91,24 @@ readonly class Setting implements Struct
             ':use_task_priority' => $this->useTaskPriority,
             ':use_task_size' => $this->useTaskSize,
             ':timezone' => $this->timezone,
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            // No need to include user_id in API output
+            'session_duration' => $this->sessionDuration,
+            'short_rest_duration' => $this->shortRestDuration,
+            'long_rest_duration' => $this->longRestDuration,
+            'long_rest_threshold' => $this->longRestThreshold,
+            'rock_breaking_threshold' => $this->rockBreakingThreshold,
+            'use_task_priority' => $this->useTaskPriority,
+            'use_task_size' => $this->useTaskSize,
+            'timezone' => $this->timezone,
         ];
     }
 }

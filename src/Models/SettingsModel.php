@@ -1,39 +1,52 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Data\SQL;
 use App\Structs\Setting;
 use PDO;
-use PDOException;
+use Exception;
 
+/**
+ *
+ */
 class SettingsModel extends Model
 {
-    public function getCurrent(): Setting {
-        try {
-            $this->pdo->beginTransaction();
-            $currentSettingsStatement = $this->pdo->prepare(query: SQL::CURRENTSETTINGS);
-            $currentSettingsStatement->execute(params: [':id' => Setting::ID]);
-            $this->pdo->commit();
+    /**
+     * @param int $userId
+     * @return Setting
+     * @throws Exception
+     */
+    public function getCurrent(int $userId): Setting
+    {
+        $currentSettingsStatement = $this->pdo->prepare(
+            query: SQL::CURRENTSETTINGS
+        );
+        $currentSettingsStatement->execute(params: [':user_id' => $userId]);
+        $row = $currentSettingsStatement->fetch(mode: PDO::FETCH_ASSOC);
 
-            return Setting::fromRow($currentSettingsStatement->fetch(PDO::FETCH_ASSOC));
-        } catch (PDOException $e) {
-            $this->pdo->rollBack();
-            die($e->getMessage());
-        }
+        return ($row !== false)
+            ? Setting::fromRow($row)
+            : throw new Exception(
+                message: 'Unable to locate configured settings'
+            );
     }
 
-    public function edit(Setting $settings): Setting {
-        try {
-            $this->pdo->beginTransaction();
-            $this->pdo->prepare(query: SQL::EDITSETTINGS)
-                ->execute(params: $settings->toEditParams() + [':id' => Setting::ID]);
-            $this->pdo->commit();
+    /**
+     * @param Setting $settings
+     * @param int $userId
+     * @return Setting
+     * @throws Exception
+     */
+    public function edit(Setting $settings, int $userId): Setting
+    {
+        $this->pdo->prepare(query: SQL::EDITSETTINGS)
+            ->execute(
+                params: $settings->toEditParams() + [':user_id' => $userId]
+            );
 
-            return $this->getCurrent();
-        } catch (PDOException $e) {
-            $this->pdo->rollBack();
-            die($e->getMessage());
-        }
+        return $this->getCurrent($userId);
     }
 }
