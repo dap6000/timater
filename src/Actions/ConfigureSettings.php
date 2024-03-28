@@ -18,7 +18,6 @@ final class ConfigureSettings extends BaseAction
      * @param int $userId
      * @param array $body
      * @param array $args
-     * @param PDO $pdo
      * @return array
      * @throws Exception
      */
@@ -26,10 +25,9 @@ final class ConfigureSettings extends BaseAction
         int $userId,
         array $body,
         array $args,
-        PDO $pdo,
     ): array {
         $new = Setting::fromRequest($body['settings'], $body['user']);
-        $new = (new SettingsModel(pdo: $pdo))
+        $new = (new SettingsModel(pdo: $this->pdo))
             ->edit(settings: $new, userId: $userId)
             ->toArray();
         return ['settings' => $new];

@@ -18,7 +18,6 @@ class EndPomodoroSession extends BaseAction
      * @param int $userId
      * @param array $body
      * @param array $args
-     * @param PDO $pdo
      * @return array
      * @throws Exception
      */
@@ -26,11 +25,10 @@ class EndPomodoroSession extends BaseAction
         int $userId,
         array $body,
         array $args,
-        PDO $pdo,
     ): array {
-        $settingsModel = new SettingsModel(pdo: $pdo);
+        $settingsModel = new SettingsModel(pdo: $this->pdo);
         $settings = $settingsModel->getCurrent(userId: $userId);
-        $model = new PomodoroModel($pdo);
+        $model = new PomodoroModel($this->pdo);
         $pomodoro = $model->getCurrent(userId: $userId);
         if (!is_null($pomodoro)) {
             $model->endPomodoroSession(

@@ -17,7 +17,6 @@ final class GetCurrentSettings extends BaseAction
      * @param int $userId
      * @param array $body
      * @param array $args
-     * @param PDO $pdo
      * @return array
      * @throws Exception
      */
@@ -25,9 +24,8 @@ final class GetCurrentSettings extends BaseAction
         int $userId,
         array $body,
         array $args,
-        PDO $pdo,
     ): array {
-        $settings = (new SettingsModel(pdo: $pdo))
+        $settings = (new SettingsModel(pdo: $this->pdo))
             ->getCurrent(userId: $userId)
             ->toArray();
 

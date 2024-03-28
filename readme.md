@@ -53,10 +53,17 @@ with the value you used for `PHPMYADMIN_EXPOSED_PORT` if you changed it. The
 MySQL client of your choice. Then execute the `schema.sql` file found in the
 root of this project.
 
-### Step 4 - Seed DB with Test Data (Optional)
+### Step 4 - Populate the Database
 
-Load http://localhost:8080/db/seed in your browser to run the seek script.
-Or just experiment with the API to create and manipulate the recoreds.
+You can either make use of the API itself or, to save time, there's also
+a `timater.sql` file in the project root with some randomly generated
+data to play around with. It's not terribly realistic. But it shows how
+things behave with a few hundred records. All those records are tied to
+user_id 3, by the way.
+
+To facilitate interacting with the API I'm including a `Bruno_Timater.json`
+file in the project root. This can be imported into the Bruno API client.
+See https://www.usebruno.com/.
 
 ## Why Slim?
 
@@ -66,6 +73,82 @@ lines of code. That felt like overkill. I had worked with Slim years ago and
 remembered it was pretty lightweight and is well suited for building APIs.
 The completed project is less than 25% source lines of code compared to
 the false start in Laravel.
+
+### Project Structure
+
+#### `config`
+
+Most everything in the `config` directory is adapted from Daniel Opitz's Slim
+4 Skeleton project. See https://odan.github.io/slim4-skeleton/. There may be
+some leftover oddities in those files because Daniel offers a lot of
+scaffolding I'm not using. Although it is mostly done in a way that doesn't
+impose code bloat.
+
+#### `data`
+
+MySQL data directory for use by Docker containers.
+
+### `docker`
+
+Contains build context, configuration files, and a `Dockerfile` for each of our
+three containers.
+
+### `logs`
+
+Directory for logging to write to.
+
+### `public`
+
+Maps to the web root and contains our "front controller". It's been
+deconstructed from the default Slim 4 approach. See `config/bootstrap.php`,
+`config/container.php`, `config/middleware.php`, and `config/routes.php`.
+
+### `src`
+
+This contains the bulk of our application logic and maps to the `App` namespace
+for PSR-4 auto-loading.
+
+#### `src/Actions`
+
+Actions are invokable and are used as callables in the route definitions. Each
+defined route has a companion Action class that does the bulk of the work. This
+work involves parsing inputs out of the request body, headers, etc; starting a
+database transaction; using Models, Services, and Structs to process the inputs;
+then either rolling back the transaction if we hit an error or reporting the
+results of our work in JSON format.
+
+#### `src/Data`
+
+This directory contains our database connection builders and our SQL queries
+stored as constants in the SQL.php file.
+
+#### `src/Middleware`
+
+This houses any custom middleware we need on top of what is provided by Slim or
+any other dependencies we care to bring in.
+
+#### `src/Models`
+
+Our models work with primitive values and Struct classes to move data to and
+from the database.
+
+#### `src/Servics`
+
+Services hold business logic that doesn't neatly fit into an Action,
+Middleware, Model, or Struct.
+
+#### `src/Structs`
+
+PHP offers more type safety out of the box than JSON or database results, which
+mostly work off of strings in arrays. The Struct classes offer ways to pass the
+data moving either direction into a representation with tighter type
+definitions. They give us some data validation, error checking, and security
+improvements.
+
+### `vendor`
+
+Where our Composer managed dependencies are built and auto-loaded from.
+
 
 ## Code Standards
 
@@ -92,65 +175,96 @@ Example Response Body:
 
 ```json
 {
-    "settings": {
-        "sessionDuration": 30,
-        "shortRestDuration": 5,
-        "longRestDuration": 20,
-        "longRestThreshold": 4,
-        "rockBreakingThreshold": 3,
-        "useTaskPriority": true,
-        "useTaskSize": true,
-        "timezone": "America/Chicago"
-    },
-    "pomodoro": {
-        "id": 774,
-        "startedAt": "2024-03-25 21:05:52",
-        "endedAt": null,
-        "breakDuration": 5,
-        "timezone": "America/Chicago"
-    },
-    "active_task": {
-        "id": 179,
-        "description": "Sint iste quos et repudiandae animi omnis.",
-        "priority": "Hot",
-        "size": "Big Gulp",
-        "status": "In Progress",
-        "begunAt": "2024-03-25 21:05:52",
-        "completedAt": "2024-03-05 15:52:29",
-        "timezone": "America/Chicago"
-    },
-    "available_tasks": [
-        {
-            "id": 123,
-            "description": "Corrupti nobis quos id aut.",
-            "priority": "Urgent",
-            "size": "Venti",
-            "status": "Paused",
-            "begunAt": "2024-02-16 10:47:37",
-            "completedAt": "2024-02-16 13:29:37",
+    "data": {
+        "settings": {
+            "userId": 3,
+            "sessionDuration": 30,
+            "shortRestDuration": 5,
+            "longRestDuration": 20,
+            "longRestThreshold": 4,
+            "rockBreakingThreshold": 3,
+            "useTaskPriority": true,
+            "useTaskSize": true,
             "timezone": "America/Chicago"
         },
-        {
-            "id": 227,
-            "description": "Delectus saepe eos nostrum recusandae id.",
-            "priority": "Urgent",
-            "size": "Big Gulp",
-            "status": "Waiting",
-            "begunAt": "2024-03-21 12:39:49",
-            "completedAt": null,
+        "pomodoro": {
+            "id": 782,
+            "userId": 3,
+            "startedAt": "2024-03-25 21:05:52",
+            "endedAt": null,
+            "breakDuration": 5,
             "timezone": "America/Chicago"
         },
-        {
-            "id": 228,
-            "description": "Dolor voluptate praesentium non rem illum id cupiditate.",
-            "priority": "Cold",
-            "size": "Grande",
-            "status": "Waiting",
-            "begunAt": "2024-03-22 08:50:31",
-            "completedAt": null,
-            "timezone": "America/Chicago"
-        }
-    ]
+        "active_task": null,
+        "available_tasks": [
+            {
+                "id": 123,
+                "userId": 3,
+                "description": "Ad corporis iste incidunt officia qui error.",
+                "priority": "Warm",
+                "size": "Big Gulp",
+                "status": "Paused",
+                "begunAt": "2024-02-14 14:56:15",
+                "completedAt": "2024-02-15 11:06:15",
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 256,
+                "userId": 3,
+                "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
+                "priority": "Urgent",
+                "size": "Big Gulp",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 257,
+                "userId": 3,
+                "description": "New Child Task 1",
+                "priority": "Hot",
+                "size": "Grande",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 258,
+                "userId": 3,
+                "description": "New Child Task 2",
+                "priority": "Warm",
+                "size": "Tall",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 259,
+                "userId": 3,
+                "description": "New Child Task 3",
+                "priority": "Cold",
+                "size": "Short",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 260,
+                "userId": 3,
+                "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
+                "priority": "Urgent",
+                "size": "Big Gulp",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            }
+        ]
+    }
 }
 ```
 
@@ -175,16 +289,18 @@ Example Response Body:
 
 ```json
 {
+  "data": {
     "settings": {
-        "session_duration": 25,
-        "short_rest_duration": 5,
-        "long_rest_duration": 30,
-        "long_rest_threshold": 4,
-        "rock_breaking_threshold": 4,
-        "use_task_priority": true,
-        "use_task_size": true,
-        "timezone": "America/Chicago"
+      "session_duration": 30,
+      "short_rest_duration": 5,
+      "long_rest_duration": 20,
+      "long_rest_threshold": 4,
+      "rock_breaking_threshold": 3,
+      "use_task_priority": true,
+      "use_task_size": true,
+      "timezone": "America/Chicago"
     }
+  }
 }
 ```
 
@@ -200,16 +316,16 @@ Example Request Body
 
 ```json
 {
-    "settings": {
-        "session_duration": 30,
-        "short_rest_duration": 5,
-        "long_rest_duration": 20,
-        "long_rest_threshold": 4,
-        "rock_breaking_threshold": 3,
-        "use_task_priority": true,
-        "use_task_size": true,
-        "timezone": "America/Chicago"
-    }
+  "settings": {
+    "session_duration": 30,
+    "short_rest_duration": 5,
+    "long_rest_duration": 20,
+    "long_rest_threshold": 4,
+    "rock_breaking_threshold": 3,
+    "use_task_priority": true,
+    "use_task_size": true,
+    "timezone": "America/Chicago"
+  }
 }
 ```
 
@@ -217,16 +333,18 @@ Example Response Body:
 
 ```json
 {
+  "data": {
     "settings": {
-        "session_duration": 30,
-        "short_rest_duration": 5,
-        "long_rest_duration": 20,
-        "long_rest_threshold": 4,
-        "rock_breaking_threshold": 3,
-        "use_task_priority": true,
-        "use_task_size": true,
-        "timezone": "America/Chicago"
+      "session_duration": 30,
+      "short_rest_duration": 5,
+      "long_rest_duration": 20,
+      "long_rest_threshold": 4,
+      "rock_breaking_threshold": 3,
+      "use_task_priority": true,
+      "use_task_size": true,
+      "timezone": "America/Chicago"
     }
+  }
 }
 ```
 
@@ -243,12 +361,12 @@ Example Request Body:
 
 ```json
 {
-    "task": {
-        "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
-        "priority": "Urgent",
-        "size": "Big Gulp",
-        "timezone": "America/Chicago"
-    }
+  "task": {
+    "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
+    "priority": "Urgent",
+    "size": "Big Gulp",
+    "timezone": "America/Chicago"
+  }
 }
 ```
 
@@ -258,16 +376,18 @@ Example Response Body:
 
 ```json
 {
+  "data": {
     "task": {
-        "id": 245,
-        "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
-        "priority": "Urgent",
-        "size": "Big Gulp",
-        "status": "Waiting",
-        "begun_at": null,
-        "completed_at": null,
-        "timezone": "America/Chicago"
+      "id": 284,
+      "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
+      "priority": "Urgent",
+      "size": "Big Gulp",
+      "status": "Waiting",
+      "begun_at": null,
+      "completed_at": null,
+      "timezone": "America/Chicago"
     }
+  }
 }
 ```
 
@@ -283,12 +403,12 @@ Example Request Body
 
 ```json
 {
-    "task": {
-        "id": 230,
-        "description": "New task description.",
-        "priority": "Hot",
-        "size": "Grande"
-    }
+  "task": {
+    "id": 230,
+    "description": "New task description.",
+    "priority": "Hot",
+    "size": "Grande"
+  }
 }
 ```
 
@@ -296,16 +416,18 @@ Example Response Body:
 
 ```json
 {
+  "data": {
     "task": {
-        "id": 230,
-        "description": "New task description.",
-        "priority": "Hot",
-        "size": "Grande",
-        "status": "Split",
-        "begun_at": "2024-03-22 13:01:56",
-        "completed_at": null,
-        "timezone": "America/Chicago"
+      "id": 230,
+      "description": "New task description.",
+      "priority": "Hot",
+      "size": "Grande",
+      "status": "Completed",
+      "begun_at": "2024-03-15 09:05:52",
+      "completed_at": "2024-03-15 10:03:52",
+      "timezone": "America/Chicago"
     }
+  }
 }
 ```
 
@@ -329,26 +451,26 @@ Example Request Body
 
 ```json
 {
-    "children": [
-        {
-            "description": "New Child Task 1",
-            "priority": "Hot",
-            "size": "Grande",
-            "timezone": "America/Chicago"
-        },
-        {
-            "description": "New Child Task 2",
-            "priority": "Warm",
-            "size": "Tall",
-            "timezone": "America/Chicago"
-        },
-        {
-            "description": "New Child Task 3",
-            "priority": "Cold",
-            "size": "Short",
-            "timezone": "America/Chicago"
-        }
-    ]
+  "children": [
+    {
+      "description": "New Child Task 1",
+      "priority": "Hot",
+      "size": "Grande",
+      "timezone": "America/Chicago"
+    },
+    {
+      "description": "New Child Task 2",
+      "priority": "Warm",
+      "size": "Tall",
+      "timezone": "America/Chicago"
+    },
+    {
+      "description": "New Child Task 3",
+      "priority": "Cold",
+      "size": "Short",
+      "timezone": "America/Chicago"
+    }
+  ]
 }
 ```
 
@@ -356,48 +478,252 @@ Example Response Body:
 
 ```json
 {
+  "data": {
     "parent": {
-        "id": 231,
-        "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
-        "priority": "Urgent",
-        "size": "Big Gulp",
-        "status": "Split",
+      "id": 239,
+      "userId": 3,
+      "description": "Dicta iure hic facere.",
+      "priority": "Warm",
+      "size": "Grande",
+      "status": "Split",
+      "begunAt": "2024-03-19 10:50:43",
+      "completedAt": "2024-03-19 12:56:43",
+      "timezone": "America/Chicago"
+    },
+    "children": [
+      {
+        "id": 257,
+        "userId": 3,
+        "description": "New Child Task 1",
+        "priority": "Hot",
+        "size": "Grande",
+        "status": "Waiting",
         "begunAt": null,
         "completedAt": null,
         "timezone": "America/Chicago"
-    },
-    "children": [
-        {
-            "id": 247,
-            "description": "New Child Task 1",
-            "priority": "Hot",
-            "size": "Grande",
-            "status": "Waiting",
-            "begunAt": null,
-            "completedAt": null,
-            "timezone": "America/Chicago"
-        },
-        {
-            "id": 248,
-            "description": "New Child Task 2",
-            "priority": "Warm",
-            "size": "Tall",
-            "status": "Waiting",
-            "begunAt": null,
-            "completedAt": null,
-            "timezone": "America/Chicago"
-        },
-        {
-            "id": 249,
-            "description": "New Child Task 3",
-            "priority": "Cold",
-            "size": "Short",
-            "status": "Waiting",
-            "begunAt": null,
-            "completedAt": null,
-            "timezone": "America/Chicago"
-        }
+      },
+      {
+        "id": 258,
+        "userId": 3,
+        "description": "New Child Task 2",
+        "priority": "Warm",
+        "size": "Tall",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 259,
+        "userId": 3,
+        "description": "New Child Task 3",
+        "priority": "Cold",
+        "size": "Short",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 261,
+        "userId": 3,
+        "description": "New Child Task 1",
+        "priority": "Hot",
+        "size": "Grande",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 262,
+        "userId": 3,
+        "description": "New Child Task 2",
+        "priority": "Warm",
+        "size": "Tall",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 263,
+        "userId": 3,
+        "description": "New Child Task 3",
+        "priority": "Cold",
+        "size": "Short",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 265,
+        "userId": 3,
+        "description": "New Child Task 1",
+        "priority": "Hot",
+        "size": "Grande",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 266,
+        "userId": 3,
+        "description": "New Child Task 2",
+        "priority": "Warm",
+        "size": "Tall",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 267,
+        "userId": 3,
+        "description": "New Child Task 3",
+        "priority": "Cold",
+        "size": "Short",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 277,
+        "userId": 3,
+        "description": "New Child Task 1",
+        "priority": "Hot",
+        "size": "Grande",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 278,
+        "userId": 3,
+        "description": "New Child Task 2",
+        "priority": "Warm",
+        "size": "Tall",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 279,
+        "userId": 3,
+        "description": "New Child Task 3",
+        "priority": "Cold",
+        "size": "Short",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 280,
+        "userId": 3,
+        "description": "New Child Task 1",
+        "priority": "Hot",
+        "size": "Grande",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 281,
+        "userId": 3,
+        "description": "New Child Task 2",
+        "priority": "Warm",
+        "size": "Tall",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 282,
+        "userId": 3,
+        "description": "New Child Task 3",
+        "priority": "Cold",
+        "size": "Short",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 285,
+        "userId": 3,
+        "description": "New Child Task 1",
+        "priority": "Hot",
+        "size": "Grande",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 286,
+        "userId": 3,
+        "description": "New Child Task 2",
+        "priority": "Warm",
+        "size": "Tall",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 287,
+        "userId": 3,
+        "description": "New Child Task 3",
+        "priority": "Cold",
+        "size": "Short",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 288,
+        "userId": 3,
+        "description": "New Child Task 1",
+        "priority": "Hot",
+        "size": "Grande",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 289,
+        "userId": 3,
+        "description": "New Child Task 2",
+        "priority": "Warm",
+        "size": "Tall",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 290,
+        "userId": 3,
+        "description": "New Child Task 3",
+        "priority": "Cold",
+        "size": "Short",
+        "status": "Waiting",
+        "begunAt": null,
+        "completedAt": null,
+        "timezone": "America/Chicago"
+      }
     ]
+  }
 }
 ```
 
@@ -415,32 +741,60 @@ Example Response Body:
 
 ```json
 {
+  "data": {
     "tasks": [
-        {
-            "id": 227,
-            "description": "Delectus saepe eos nostrum recusandae id.",
-            "priority": "Urgent",
-            "size": "Big Gulp",
-            "status": "Waiting",
-            "begun_at": "2024-03-21 12:39:49",
-            "completed_at": null,
-            "timezone": "America/Chicago"
-        },
-        {
-            "id": 228,
-            "description": "Dolor voluptate praesentium non rem illum id cupiditate.",
-            "priority": "Cold",
-            "size": "Grande",
-            "status": "Waiting",
-            "begun_at": "2024-03-22 08:50:31",
-            "completed_at": null,
-            "timezone": "America/Chicago"
-        },
-        {
-            "id": 229,
-            "description": "…"
-        }
+      {
+        "id": 123,
+        "description": "Ad corporis iste incidunt officia qui error.",
+        "priority": "Warm",
+        "size": "Big Gulp",
+        "status": "Paused",
+        "begun_at": "2024-02-14 14:56:15",
+        "completed_at": "2024-02-15 11:06:15",
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 256,
+        "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
+        "priority": "Urgent",
+        "size": "Big Gulp",
+        "status": "Waiting",
+        "begun_at": null,
+        "completed_at": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 257,
+        "description": "New Child Task 1",
+        "priority": "Hot",
+        "size": "Grande",
+        "status": "Waiting",
+        "begun_at": null,
+        "completed_at": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 258,
+        "description": "New Child Task 2",
+        "priority": "Warm",
+        "size": "Tall",
+        "status": "Waiting",
+        "begun_at": null,
+        "completed_at": null,
+        "timezone": "America/Chicago"
+      },
+      {
+        "id": 259,
+        "description": "New Child Task 3",
+        "priority": "Cold",
+        "size": "Short",
+        "status": "Waiting",
+        "begun_at": null,
+        "completed_at": null,
+        "timezone": "America/Chicago"
+      }
     ]
+  }
 }
 ```
 
@@ -459,7 +813,7 @@ Assignment involves:
 - Update `active_task`
 - Create `pomodoro_tasks` record
 
-Endpoint: `/task/assign/230`
+Endpoint: `/task/assign/{id}`
 
 HTTP Method: POST
 
@@ -467,7 +821,7 @@ Example Request Body
 
 ```json
 {
-    "id": 123,
+    "id": 284,
     "time": "2024-03-25 16:05:52",
     "timezone": "America/Chicago"
 }
@@ -477,15 +831,18 @@ Example Response Body:
 
 ```json
 {
-    "task": {
-        "id": 123,
-        "description": "Corrupti nobis quos id aut.",
-        "priority": "Urgent",
-        "size": "Venti",
-        "status": "In Progress",
-        "begunAt": "2024-02-16 10:47:37",
-        "completedAt": "2024-02-16 13:29:37",
-        "timezone": "America/Chicago"
+    "data": {
+        "task": {
+            "id": 284,
+            "userId": 3,
+            "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
+            "priority": "Urgent",
+            "size": "Big Gulp",
+            "status": "In Progress",
+            "begunAt": "2024-03-25 21:05:52",
+            "completedAt": null,
+            "timezone": "America\/Chicago"
+        }
     }
 }
 ```
@@ -505,7 +862,7 @@ Pausing a task involves:
 - Set pomodoro_tasks.unassigned_at in associated record
 - Created record in `pauses` table with `task_id`, `paused_at`, `timezone`
 
-Endpoint: `/tasks/pause/123`
+Endpoint: `/tasks/pause/{id}`
 
 HTTP Method: POST
 
@@ -513,7 +870,7 @@ Example Request Body
 
 ```json
 {
-    "id": 123,
+    "id": 284,
     "time": "2024-03-25 16:05:52",
     "timezone": "America/Chicago"
 }
@@ -523,15 +880,18 @@ Example Response Body:
 
 ```json
 {
-    "task": {
-        "id": 123,
-        "description": "Corrupti nobis quos id aut.",
-        "priority": "Urgent",
-        "size": "Venti",
-        "status": "Paused",
-        "begunAt": "2024-02-16 10:47:37",
-        "completedAt": "2024-02-16 13:29:37",
-        "timezone": "America/Chicago"
+    "data": {
+        "task": {
+            "id": 284,
+            "userId": 3,
+            "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
+            "priority": "Urgent",
+            "size": "Big Gulp",
+            "status": "Paused",
+            "begunAt": "2024-03-25 21:05:52",
+            "completedAt": null,
+            "timezone": "America/Chicago"
+        }
     }
 }
 ```
@@ -552,7 +912,7 @@ Example Request Body
 
 ```json
 {
-    "id": 124,
+    "id": 284,
     "time": "2024-03-25 16:05:52",
     "timezone": "America/Chicago"
 }
@@ -562,16 +922,19 @@ Example Response Body:
 
 ```json
 {
-    "message": "Slim Application Error",
-    "exception": [
-        {
-            "type": "Exception",
-            "code": 0,
-            "message": "ID mismatch!",
-            "file": "/var/www/slim_app/src/Handlers/CompleteTask.php",
-            "line": 20
-        }
-    ]
+  "data": {
+    "task": {
+      "id": 284,
+      "userId": 3,
+      "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
+      "priority": "Urgent",
+      "size": "Big Gulp",
+      "status": "Completed",
+      "begunAt": "2024-03-25 21:05:52",
+      "completedAt": "2024-03-25 21:05:52",
+      "timezone": "America/Chicago"
+    }
+  }
 }
 ```
 
@@ -614,12 +977,15 @@ Example Response Body:
 
 ```json
 {
-    "pomodoro": {
-        "id": 772,
-        "startedAt": "2024-03-25 21:05:52",
-        "endedAt": null,
-        "breakDuration": 5,
-        "timezone": "America/Chicago"
+    "data": {
+        "pomodoro": {
+            "id": 782,
+            "userId": 3,
+            "startedAt": "2024-03-25 21:05:52",
+            "endedAt": null,
+            "breakDuration": 5,
+            "timezone": "America/Chicago"
+        }
     }
 }
 ```
@@ -646,8 +1012,10 @@ Example Response Body:
 
 ```json
 {
-    "break": {
-        "duration": 5
+    "data": {
+        "break": {
+            "duration": 5
+        }
     }
 }
 ```
@@ -678,48 +1046,366 @@ Example Response Body:
 
 ```json
 {
-    "message": "Goodbye!"
+    "data": {
+        "message": "Goodbye!"
+    }
 }
 ```
 
 ## Reporting
 
 Reports take a start date and an end date then gather their info within the
-specified range.
+specified range. Users with the admin role (identified by API key) can specify
+a user ID in the URL and generate reports for other users. Standard users can
+only run reports on their own data.
 
 ### View Tasks Over Threshold
 
 See tasks that took longer than the configured number of pomodoro sessions to complete.
 This report can be used to better learn to spot tasks that need to be split.
 
-### View Metrics by Priority
+Endpoint: `/reports/tasks/long` or `/reports/tasks/long/{id}}`
 
-See times from created/modified to beginning work, completed work, and time on task (in
-pomodoro sessions and minutes) by priority level. Ideally higher priority items should
-have lower average time to beginning work.
+Method: GET
 
-### View Metrics by Size
+Sample request body: none
 
-See times from created/modified to beginning work, completed work, and time on task (in
-pomodoro sessions and minutes) by task size. Ideally the relationship between task size
-and time on task should be clear.
+Sample response body:
+```json
+{
+  "data": {
+    "report": [
+      {
+        "taskId": 179,
+        "sessionCount": 6,
+        "description": "Minus voluptatem perspiciatis laborum quaerat.",
+        "priority": "Urgent",
+        "size": "Big Gulp",
+        "status": "In Progress",
+        "begunAt": "2024-02-28 15:31:14",
+        "completedAt": "2024-02-29 10:11:14",
+        "timezone": "America/Chicago"
+      }
+    ]
+  }
+}
+```
 
 ### View Splits
 
 Review tasks that have been split along with their resulting child tasks. May be useful
 for seeing improvement over time with "rightsizing" tasks.
 
+Endpoint: `/reports/tasks/splits` or `/reports/tasks/splits/{id}}`
+
+Method: GET
+
+Sample request body: none
+
+Sample response body:
+```json
+{
+  "data": {
+    "report": [
+      {
+        "split": {
+          "num_new_tasks": 3,
+          "parent": {
+            "id": 231,
+            "userId": 3,
+            "description": "Quidem enim qui voluptas et doloribus.",
+            "priority": "Warm",
+            "size": "Short",
+            "status": "Split",
+            "begunAt": "2024-03-15 10:03:58",
+            "completedAt": "2024-03-15 10:13:58",
+            "timezone": "America/Chicago"
+          },
+          "children": [
+            {
+              "id": 257,
+              "userId": 3,
+              "description": "New Child Task 1",
+              "priority": "Hot",
+              "size": "Grande",
+              "status": "Waiting",
+              "begunAt": null,
+              "completedAt": null,
+              "timezone": "America/Chicago"
+            },
+            {
+              "id": 258,
+              "userId": 3,
+              "description": "New Child Task 2",
+              "priority": "Warm",
+              "size": "Tall",
+              "status": "Waiting",
+              "begunAt": null,
+              "completedAt": null,
+              "timezone": "America/Chicago"
+            },
+            {
+              "id": 259,
+              "userId": 3,
+              "description": "New Child Task 3",
+              "priority": "Cold",
+              "size": "Short",
+              "status": "Waiting",
+              "begunAt": null,
+              "completedAt": null,
+              "timezone": "America/Chicago"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+```
+
 ### View Paused Tasks
 
 Tasks paused for an excessive amount of time
 
+Endpoint: `/reports/tasks/pauses` or `/reports/tasks/pauses/{id}}`
+
+Method: GET
+
+Sample request body: none
+
+Sample response body:
+```json
+{
+  "data": {
+    "report": [
+      {
+        "taskId": 123,
+        "description": "Ad corporis iste incidunt officia qui error.",
+        "priority": "Warm",
+        "size": "Big Gulp",
+        "status": "Paused",
+        "begunAt": "2024-02-14 14:56:15",
+        "completedAt": "2024-02-15 11:06:15",
+        "timezone": "America/Chicago",
+        "totalPauses": 5,
+        "totalSeconds": 600,
+        "totalMinutes": 10,
+        "totalHours": 0.16666667
+      },
+      {
+        "taskId": 179,
+        "description": "Minus voluptatem perspiciatis laborum quaerat.",
+        "priority": "Urgent",
+        "size": "Big Gulp",
+        "status": "In Progress",
+        "begunAt": "2024-02-28 15:31:14",
+        "completedAt": "2024-02-29 10:11:14",
+        "timezone": "America/Chicago",
+        "totalPauses": 5,
+        "totalSeconds": 2580,
+        "totalMinutes": 43,
+        "totalHours": 0.71666667
+      }
+    ]
+  }
+}
+```
+
+### View Metrics by Priority
+
+See times from created/modified to beginning work, completed work, and time on task (in
+pomodoro sessions and minutes) by priority level. Ideally higher priority items should
+have lower average time to beginning work. All times reported in seconds.
+
+Endpoint: `/reports/metrics/priority` or `/reports/metrics/priority/{id}}`
+
+Method: GET
+
+Sample request body:
+```json
+{
+    "start": "2024-01-25",
+    "end": "2024-03-25",
+    "timezone": "America/Chicago"
+}
+```
+
+Sample response body:
+```json
+{
+  "data": [
+    {
+      "priority": "Urgent",
+      "avg_create_to_start": "2703537.1915",
+      "avg_create_to_complete": "2685307.4043",
+      "avg_begun_to_completed": "18229.7872",
+      "avg_session_count": "1.0000",
+      "max_create_to_start": 5325675,
+      "max_create_to_complete": 5314035,
+      "max_begun_to_completed": 240480,
+      "max_session_count": 1,
+      "min_create_to_start": 468138,
+      "min_create_to_complete": 467778,
+      "min_begun_to_completed": 300,
+      "min_session_count": 1
+    },
+    {
+      "priority": "Hot",
+      "avg_create_to_start": "2714543.1887",
+      "avg_create_to_complete": "2630156.6792",
+      "avg_begun_to_completed": "84386.5094",
+      "avg_session_count": "1.0000",
+      "max_create_to_start": 5313993,
+      "max_create_to_complete": 5310753,
+      "max_begun_to_completed": 3405565,
+      "max_session_count": 1,
+      "min_create_to_start": 399519,
+      "min_create_to_complete": 96431,
+      "min_begun_to_completed": 300,
+      "min_session_count": 1
+    },
+    {
+      "priority": "Cold",
+      "avg_create_to_start": "2996104.3111",
+      "avg_create_to_complete": "2976464.3111",
+      "avg_begun_to_completed": "19640.0000",
+      "avg_session_count": "1.0000",
+      "max_create_to_start": 5310697,
+      "max_create_to_complete": 5302597,
+      "max_begun_to_completed": 245400,
+      "max_session_count": 1,
+      "min_create_to_start": 402530,
+      "min_create_to_complete": 401990,
+      "min_begun_to_completed": 300,
+      "min_session_count": 1
+    },
+    {
+      "priority": "Warm",
+      "avg_create_to_start": "2808229.5556",
+      "avg_create_to_complete": "2770244.2222",
+      "avg_begun_to_completed": "37985.3333",
+      "avg_session_count": "1.0000",
+      "max_create_to_start": 5302588,
+      "max_create_to_complete": 5228188,
+      "max_begun_to_completed": 246900,
+      "max_session_count": 1,
+      "min_create_to_start": 380282,
+      "min_create_to_complete": 373562,
+      "min_begun_to_completed": 300,
+      "min_session_count": 1
+    }
+  ]
+}
+```
+
+### View Metrics by Size
+
+See times from created/modified to beginning work, completed work, and time on task (in
+pomodoro sessions and minutes) by task size. Ideally the relationship between task size
+and time on task should be clear. All times reported in seconds.
+
+Endpoint: `/reports/metrics/size` or `/reports/metrics/size/{id}}`
+
+Method: GET
+
+Sample request body:
+```json
+{
+    "start": "2024-01-25",
+    "end": "2024-03-25",
+    "timezone": "America/Chicago"
+}
+```
+
+Sample response body:
+```json
+{
+  "data": [
+    {
+      "size": "Venti",
+      "avg_create_to_start": "2890092.9643",
+      "avg_create_to_complete": "2839570.8214",
+      "avg_begun_to_completed": "50522.1429",
+      "avg_session_count": "1.0000",
+      "max_create_to_start": 5325675,
+      "max_create_to_complete": 5314035,
+      "max_begun_to_completed": 242400,
+      "max_session_count": 1,
+      "min_create_to_start": 399519,
+      "min_create_to_complete": 386079,
+      "min_begun_to_completed": 5700,
+      "min_session_count": 1
+    },
+    {
+      "size": "Tall",
+      "avg_create_to_start": "2889406.6458",
+      "avg_create_to_complete": "2882076.6458",
+      "avg_begun_to_completed": "7330.0000",
+      "avg_session_count": "1.0000",
+      "max_create_to_start": 5313993,
+      "max_create_to_complete": 5310753,
+      "max_begun_to_completed": 59400,
+      "max_session_count": 1,
+      "min_create_to_start": 401982,
+      "min_create_to_complete": 399522,
+      "min_begun_to_completed": 1200,
+      "min_session_count": 1
+    },
+    {
+      "size": "Grande",
+      "avg_create_to_start": "2609698.5714",
+      "avg_create_to_complete": "2600813.4286",
+      "avg_begun_to_completed": "8885.1429",
+      "avg_session_count": "1.0000",
+      "max_create_to_start": 5310697,
+      "max_create_to_complete": 5302597,
+      "max_begun_to_completed": 63000,
+      "max_session_count": 1,
+      "min_create_to_start": 380282,
+      "min_create_to_complete": 373562,
+      "min_begun_to_completed": 3000,
+      "min_session_count": 1
+    },
+    {
+      "size": "Big Gulp",
+      "avg_create_to_start": "2903499.9706",
+      "avg_create_to_complete": "2835902.9118",
+      "avg_begun_to_completed": "67597.0588",
+      "avg_session_count": "1.0000",
+      "max_create_to_start": 5302588,
+      "max_create_to_complete": 5228188,
+      "max_begun_to_completed": 250500,
+      "max_session_count": 1,
+      "min_create_to_start": 550206,
+      "min_create_to_complete": 481206,
+      "min_begun_to_completed": 10500,
+      "min_session_count": 1
+    },
+    {
+      "size": "Short",
+      "avg_create_to_start": "2721322.0000",
+      "avg_create_to_complete": "2642506.7778",
+      "avg_begun_to_completed": "78815.2222",
+      "avg_session_count": "1.0000",
+      "max_create_to_start": 4970395,
+      "max_create_to_complete": 4969495,
+      "max_begun_to_completed": 3405565,
+      "max_session_count": 1,
+      "min_create_to_start": 402530,
+      "min_create_to_complete": 96431,
+      "min_begun_to_completed": 300,
+      "min_session_count": 1
+    }
+  ]
+}
+```
+
 # TODO
 
-- Dependency injection
-- Build reports
-- Update example JSON request and response blocks
+- OAuth2?
 - csrf?
 - JWT?
 - Tests?
 - Logging?
 - Rate limits?
+- JSON Schema?

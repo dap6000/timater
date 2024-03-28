@@ -19,7 +19,6 @@ final class EditTask extends BaseAction
      * @param int $userId
      * @param array $body
      * @param array $args
-     * @param PDO $pdo
      * @return array
      * @throws Exception
      */
@@ -27,14 +26,13 @@ final class EditTask extends BaseAction
         int $userId,
         array $body,
         array $args,
-        PDO $pdo,
     ): array {
         $id = intval($args['id']);
         $changes = $body['task'];
         if ($id !== intval($changes['id'])) {
             throw new Exception(message: 'ID mismatch!');
         }
-        $tasksModel = new TasksModel(pdo: $pdo);
+        $tasksModel = new TasksModel(pdo: $this->pdo);
         $current = $tasksModel->get(id: $id, userId: $userId)->toArray();
         $current['description'] = $changes['description'];
         $current['priority'] = $changes['priority'];

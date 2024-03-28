@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Monolog\Logger;
 use PDO;
 
 /**
@@ -11,13 +12,10 @@ use PDO;
  */
 class Model
 {
-    protected PDO $pdo;
-
     /**
      * @param PDO $pdo
      */
-    public function __construct(PDO $pdo)
+    public function __construct(protected PDO $pdo)
     {
-        $this->pdo = $pdo;
     }
 }

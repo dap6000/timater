@@ -15,12 +15,10 @@ use PDO;
  */
 final class CreateTask extends BaseAction
 {
-
     /**
      * @param int $userId
      * @param array $body
      * @param array $args
-     * @param PDO $pdo
      * @return array
      * @throws Exception
      */
@@ -28,15 +26,14 @@ final class CreateTask extends BaseAction
         int $userId,
         array $body,
         array $args,
-        PDO $pdo,
     ): array {
-        $setting = (new SettingsModel(pdo: $pdo))->getCurrent(userId: $userId);
+        $setting = (new SettingsModel(pdo: $this->pdo))->getCurrent(userId: $userId);
         $newTask = Task::fromRequest(
             $body['task'],
             $body['user'],
             $setting
         );
-        $tasksModel = new TasksModel(pdo: $pdo);
+        $tasksModel = new TasksModel(pdo: $this->pdo);
         $task = $tasksModel->create(
             task: $newTask,
             userId: $userId

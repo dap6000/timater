@@ -10,7 +10,7 @@ use Exception;
 /**
  *
  */
-readonly class Setting implements Struct
+final readonly class Setting implements Struct
 {
     /**
      * @param int $userId

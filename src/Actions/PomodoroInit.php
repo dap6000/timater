@@ -19,7 +19,6 @@ final class PomodoroInit extends BaseAction
      * @param int $userId
      * @param array $body
      * @param array $args
-     * @param PDO $pdo
      * @return array
      * @throws Exception
      */
@@ -27,11 +26,10 @@ final class PomodoroInit extends BaseAction
         int $userId,
         array $body,
         array $args,
-        PDO $pdo,
     ): array {
-        $pomodoro = (new PomodoroModel($pdo))->getCurrent(userId: $userId);
-        $settings = (new SettingsModel($pdo))->getCurrent(userId: $userId);
-        $tasksModel = new TasksModel($pdo);
+        $pomodoro = (new PomodoroModel($this->pdo))->getCurrent(userId: $userId);
+        $settings = (new SettingsModel($this->pdo))->getCurrent(userId: $userId);
+        $tasksModel = new TasksModel($this->pdo);
         $activeTask = $tasksModel->getActive(userId: $userId);
         $availableTasks = $tasksModel->getAvailable(userId: $userId);
 

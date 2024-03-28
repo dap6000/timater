@@ -13,7 +13,7 @@ use Exception;
 /**
  *
  */
-readonly class Pomodoro implements Struct
+final readonly class Pomodoro implements Struct
 {
     /**
      * @param int|null $id
@@ -21,7 +21,7 @@ readonly class Pomodoro implements Struct
      * @param string $startedAt
      * @param string|null $endedAt
      * @param int $breakDuration
-     * @param string $timezone
+     * @param non-empty-string $timezone
      */
     public function __construct(
         public ?int $id,
@@ -31,7 +31,7 @@ readonly class Pomodoro implements Struct
         public int $breakDuration,
         public string $timezone,
     ) {
-        if (!in_array($timezone, DateTimeZone::listIdentifiers())) {
+        if (!in_array($this->timezone, DateTimeZone::listIdentifiers())) {
             throw InvalidTimeZoneException::make($this->timezone);
         }
     }
@@ -86,9 +86,18 @@ readonly class Pomodoro implements Struct
 
     /**
      * @return array
+     * @throws Exception
      */
     public function toArray(): array
     {
-        return (array)$this;
+        $tz = new TimeZoneService();
+        return [
+            'id' => $this->id,
+            'user_id' => $this->userId,
+            'started_at' => $tz->utcToTz($this->startedAt, $this->timezone) ?? '',
+            'ended_at' => $tz->utcToTz($this->endedAt, $this->timezone) ?? '',
+            'break_duration' => $this->breakDuration,
+            'timezone' => $this->timezone
+        ];
     }
 }

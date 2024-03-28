@@ -19,7 +19,6 @@ final class StartPomodoroSession extends BaseAction
      * @param int $userId
      * @param array $body
      * @param array $args
-     * @param PDO $pdo
      * @return array
      * @throws Exception
      */
@@ -27,9 +26,8 @@ final class StartPomodoroSession extends BaseAction
         int $userId,
         array $body,
         array $args,
-        PDO $pdo,
     ): array {
-        $settings = (new SettingsModel(pdo: $pdo))->getCurrent(
+        $settings = (new SettingsModel(pdo: $this->pdo))->getCurrent(
             userId: $userId
         );
         $newPomodoro = Pomodoro::fromRequest(
@@ -38,7 +36,7 @@ final class StartPomodoroSession extends BaseAction
             $settings
         );
         $taskId = $body['task']->id ?? null;
-        $model = new PomodoroModel(pdo: $pdo);
+        $model = new PomodoroModel(pdo: $this->pdo);
         $pomodoro = $model->startPomodoroSession(
             pomodoro: $newPomodoro,
             userId: $userId,

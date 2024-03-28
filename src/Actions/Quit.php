@@ -16,7 +16,6 @@ final class Quit extends EndPomodoroSession
      * @param int $userId
      * @param array $body
      * @param array $args
-     * @param PDO $pdo
      * @return array
      * @throws Exception
      */
@@ -24,9 +23,8 @@ final class Quit extends EndPomodoroSession
         int $userId,
         array $body,
         array $args,
-        PDO $pdo,
     ): array {
-        parent::getData($userId, $body, $args, $pdo);
+        parent::getData($userId, $body, $args);
         return ['message' => 'Goodbye!'];
     }
 }

@@ -163,6 +163,13 @@ class TasksModel extends Model
         }
         $tz = new TimeZoneService();
         $utcTime = $tz->tzToUtc($time, $timezone);
+        $sql = SQL::BEGINTASK;
+        $params = [
+            ':id' => $id,
+            ':user_id' => $userId,
+            ':begun_at' => $utcTime,
+            ':timezone' => $timezone
+        ];
         $beginTaskStmt = $this->pdo->prepare(query: SQL::BEGINTASK);
         $beginTaskStmt->execute(
             params: [
@@ -236,6 +243,16 @@ class TasksModel extends Model
             throw new Exception(message: 'No active pomodoro session exists.');
         }
         $me = $this->get(id: $id, userId: $userId);
+        if (
+            !in_array(
+                $me->status,
+                ['Waiting', 'Paused']
+            )
+        ) {
+            throw new Exception(
+                message:'Can only assigned a paused or waiting tasks.'
+            );
+        }
         $activeTaskStmt = $this->pdo->prepare(query: SQL::UPSERTACTIVETASK);
         $activeTaskStmt->execute(
             params: [
@@ -252,6 +269,7 @@ class TasksModel extends Model
                 timezone: $timezone
             );
         }
+
         $me = $this->begin(
             id: $id,
             userId: $userId,
@@ -261,6 +279,7 @@ class TasksModel extends Model
         $createPomodoroTaskStmt = $this->pdo->prepare(
             query: SQL::CREATEPOMODOROTASK
         );
+
         $createPomodoroTaskStmt->execute(
             params: [
                 ':user_id' => $userId,
@@ -347,13 +366,6 @@ class TasksModel extends Model
             ':timezone' => $timezone,
             ':task_id' => $id
         ]);
-
-        $this->assign(
-            id: $id,
-            userId: $userId,
-            time: $time,
-            timezone: $timezone
-        );
     }
 
     /**

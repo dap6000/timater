@@ -18,7 +18,6 @@ final class GetAvailableTasks extends BaseAction
      * @param int $userId
      * @param array $body
      * @param array $args
-     * @param PDO $pdo
      * @return array
      * @throws Exception
      */
@@ -26,9 +25,8 @@ final class GetAvailableTasks extends BaseAction
         int $userId,
         array $body,
         array $args,
-        PDO $pdo,
     ): array {
-        $tasksModel = new TasksModel(pdo: $pdo);
+        $tasksModel = new TasksModel(pdo: $this->pdo);
         $available = $tasksModel->getAvailable(userId: $userId);
 
         return [

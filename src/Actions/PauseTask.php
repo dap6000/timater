@@ -17,7 +17,6 @@ final class PauseTask extends BaseAction
      * @param int $userId
      * @param array $body
      * @param array $args
-     * @param PDO $pdo
      * @return array
      * @throws Exception
      */
@@ -25,10 +24,9 @@ final class PauseTask extends BaseAction
         int $userId,
         array $body,
         array $args,
-        PDO $pdo,
     ): array {
         $id = intval($args['id']);
-        $tasksModel = new TasksModel(pdo: $pdo);
+        $tasksModel = new TasksModel(pdo: $this->pdo);
         $task = $tasksModel->pause(
             id: $id,
             userId: $userId,

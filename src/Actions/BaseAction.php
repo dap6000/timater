@@ -6,6 +6,7 @@ namespace App\Actions;
 
 use App\Models\DB;
 use Exception;
+use Monolog\Logger;
 use PDO;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -15,6 +16,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 abstract class BaseAction implements Interfaces\Invokable
 {
+    public function __construct(protected PDO $pdo)
+    {
+    }
+
     /**
      * @param Request $request
      * @param Response $response
@@ -27,25 +32,24 @@ abstract class BaseAction implements Interfaces\Invokable
         Response $response,
         array $args
     ): Response {
-        // TODO DI
-        $pdo = DB::makeConnection();
         $body = (array)$request->getParsedBody();
         $userId = (!is_null($body['user']))
             ? (!is_null($body['user']['id'])) ? intval($body['user']['id']) : 0
             : 0;
         try {
-            $pdo->beginTransaction();
+            $this->pdo->beginTransaction();
             $json = json_encode(
-                $this->getData(
-                    userId: $userId,
-                    body: $body,
-                    args: $args,
-                    pdo: $pdo,
-                )
+                ['data' =>
+                        $this->getData(
+                            userId: $userId,
+                            body: $body,
+                            args: $args,
+                        )
+                ]
             );
-            $pdo->commit();
+            $this->pdo->commit();
         } catch (Exception $exception) {
-            $pdo->rollBack();
+            $this->pdo->rollBack();
             throw $exception;
         }
         if ($json === false) {
@@ -62,13 +66,11 @@ abstract class BaseAction implements Interfaces\Invokable
      * @param int $userId
      * @param array $body
      * @param array $args
-     * @param PDO $pdo
      * @return array
      */
     abstract public function getData(
         int $userId,
         array $body,
         array $args,
-        PDO $pdo,
     ): array;
 }

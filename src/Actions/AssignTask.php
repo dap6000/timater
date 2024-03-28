@@ -6,8 +6,6 @@ namespace App\Actions;
 
 use App\Models\TasksModel;
 use Exception;
-use PDO;
-
 
 /**
  *
@@ -18,7 +16,6 @@ final class AssignTask extends BaseAction
      * @param int $userId
      * @param array $body
      * @param array $args
-     * @param PDO $pdo
      * @return array
      * @throws Exception
      */
@@ -26,10 +23,9 @@ final class AssignTask extends BaseAction
         int $userId,
         array $body,
         array $args,
-        PDO $pdo,
     ): array {
         $id = intval($args['id']);
-        $tasksModel = new TasksModel(pdo: $pdo);
+        $tasksModel = new TasksModel(pdo: $this->pdo);
         $me = $tasksModel->assign(
             id: $id,
             userId: $userId,

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use App\Models\DB;
 use App\Models\UsersModel;
 use Exception;
+use Monolog\Logger;
+use PDO;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -20,6 +21,13 @@ use Slim\Exception\HttpUnauthorizedException;
 class ApiKeyMiddleware implements MiddlewareInterface
 {
     /**
+     * @param PDO $pdo
+     */
+    public function __construct(protected PDO $pdo)
+    {
+    }
+
+    /**
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
@@ -29,12 +37,10 @@ class ApiKeyMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
-        // TODO DI
-        $pdo = DB::makeConnection();
-        $usersModel = new UsersModel(pdo: $pdo);
+        $usersModel = new UsersModel(pdo: $this->pdo);
         $users = $usersModel->getAll();
         $user = null;
-        $apiKey = $request->getHeaderLine('x_api_key');
+        $apiKey = $request->getHeaderLine('X-Api-Key');
         if (!$apiKey) {
             throw new HttpUnauthorizedException($request);
         }

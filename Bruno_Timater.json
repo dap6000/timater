@@ -1,0 +1,854 @@
+{
+  "name": "Timater",
+  "version": "1",
+  "items": [
+    {
+      "type": "http",
+      "name": "Assign Task",
+      "seq": 8,
+      "request": {
+        "url": "http://localhost:8080/tasks/assign/284",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n    \"id\": 284,\n    \"time\": \"2024-03-25 16:05:52\",\n    \"timezone\": \"America/Chicago\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Complete Task",
+      "seq": 10,
+      "request": {
+        "url": "http://localhost:8080/tasks/complete/284",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n    \"id\": 284,\n    \"time\": \"2024-03-25 16:05:52\",\n    \"timezone\": \"America/Chicago\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Create Task",
+      "seq": 2,
+      "request": {
+        "url": "http://localhost:8080/tasks/add",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"task\": {\n    \"description\": \"Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!\",\n    \"priority\": \"Urgent\",\n    \"size\": \"Big Gulp\",\n    \"timezone\": \"America/Chicago\"\n  }\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Edit Settings",
+      "seq": 5,
+      "request": {
+        "url": "http://localhost:8080/settings/configure",
+        "method": "PUT",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"settings\": {\n    \"session_duration\": 30,\n    \"short_rest_duration\": 5,\n    \"long_rest_duration\": 20,\n    \"long_rest_threshold\": 4,\n    \"rock_breaking_threshold\": 3,\n    \"use_task_priority\": true,\n    \"use_task_size\": true,\n    \"timezone\": \"America/Chicago\"\n  }\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Edit Task",
+      "seq": 6,
+      "request": {
+        "url": "http://localhost:8080/tasks/edit/230",
+        "method": "PUT",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"task\": {\n    \"id\": 230,\n    \"description\": \"New task description.\",\n    \"priority\": \"Hot\",\n    \"size\": \"Grande\"\n  }\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "End Pomodoro Session",
+      "seq": 13,
+      "request": {
+        "url": "http://localhost:8080/pomodoro/end",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"ended_at\": \"2024-03-25 16:05:52\",\n  \"timezone\": \"America/Chicago\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Get Current Settings",
+      "seq": 4,
+      "request": {
+        "url": "http://localhost:8080/settings/current",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Init",
+      "seq": 12,
+      "request": {
+        "url": "http://localhost:8080/init",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "List Available Tasks",
+      "seq": 3,
+      "request": {
+        "url": "http://localhost:8080/tasks/available",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Pause Task",
+      "seq": 9,
+      "request": {
+        "url": "http://localhost:8080/tasks/pause/284",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n    \"id\": 284,\n    \"time\": \"2024-03-25 16:05:52\",\n    \"timezone\": \"America/Chicago\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Quit",
+      "seq": 14,
+      "request": {
+        "url": "http://localhost:8080/pomodoro/quit",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"ended_at\": \"2024-03-25 16:05:52\",\n  \"timezone\": \"America/Chicago\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Report Long Tasks Admin",
+      "seq": 16,
+      "request": {
+        "url": "http://localhost:8080/reports/tasks/long/3",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "e06036d41fc45e4be7e06f71a9a7a038eb900c3c21869df67b1743181c4f2f05",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Report Long Tasks",
+      "seq": 15,
+      "request": {
+        "url": "http://localhost:8080/reports/tasks/long/3",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Report Metrics by Priority Admin",
+      "seq": 24,
+      "request": {
+        "url": "http://localhost:8080/reports/metrics/priority/3",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "e06036d41fc45e4be7e06f71a9a7a038eb900c3c21869df67b1743181c4f2f05",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n    \"start\": \"2024-01-25\",\n    \"end\": \"2024-03-25\",\n    \"timezone\": \"America/Chicago\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Report Metrics by Priority",
+      "seq": 23,
+      "request": {
+        "url": "http://localhost:8080/reports/metrics/priority",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n    \"start\": \"2024-01-25\",\n    \"end\": \"2024-03-25\",\n    \"timezone\": \"America/Chicago\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Report Metrics by Size Admin",
+      "seq": 22,
+      "request": {
+        "url": "http://localhost:8080/reports/metrics/size/3",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "e06036d41fc45e4be7e06f71a9a7a038eb900c3c21869df67b1743181c4f2f05",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n    \"start\": \"2024-01-25\",\n    \"end\": \"2024-03-25\",\n    \"timezone\": \"America/Chicago\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Report Metrics by Size",
+      "seq": 21,
+      "request": {
+        "url": "http://localhost:8080/reports/metrics/size",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n    \"start\": \"2024-01-25\",\n    \"end\": \"2024-03-25\",\n    \"timezone\": \"America/Chicago\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Report Pauses Admin",
+      "seq": 18,
+      "request": {
+        "url": "http://localhost:8080/reports/tasks/pauses/3",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "e06036d41fc45e4be7e06f71a9a7a038eb900c3c21869df67b1743181c4f2f05",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Report Pauses",
+      "seq": 17,
+      "request": {
+        "url": "http://localhost:8080/reports/tasks/splits",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Report Splits Admin",
+      "seq": 20,
+      "request": {
+        "url": "http://localhost:8080/reports/tasks/pauses/3",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "e06036d41fc45e4be7e06f71a9a7a038eb900c3c21869df67b1743181c4f2f05",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Report Splits",
+      "seq": 19,
+      "request": {
+        "url": "http://localhost:8080/reports/tasks/pauses",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Split Task",
+      "seq": 7,
+      "request": {
+        "url": "http://localhost:8080/tasks/split/239",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"children\": [\n    {\n      \"description\": \"New Child Task 1\",\n      \"priority\": \"Hot\",\n      \"size\": \"Grande\",\n      \"timezone\": \"America/Chicago\"\n    },\n    {\n      \"description\": \"New Child Task 2\",\n      \"priority\": \"Warm\",\n      \"size\": \"Tall\",\n      \"timezone\": \"America/Chicago\"\n    },\n    {\n      \"description\": \"New Child Task 3\",\n      \"priority\": \"Cold\",\n      \"size\": \"Short\",\n      \"timezone\": \"America/Chicago\"\n    }\n  ]\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "http",
+      "name": "Start Pomodoro Session",
+      "seq": 11,
+      "request": {
+        "url": "http://localhost:8080/pomodoro/start",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "b49c2637ab9cc2de060fb0d8b5201d1f2afe5844b077b0011c52b057fa197755",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"pomodoro\": {\n    \"break_duration\": 5,\n    \"started_at\": \"2024-03-25 16:05:52\",\n    \"timezone\": \"America/Chicago\"\n  },\n  \"task\": {\n    \"id\": 125\n  }\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "json",
+      "name": "bruno",
+      "seq": 1
+    }
+  ],
+  "environments": []
+}

@@ -10,7 +10,7 @@ use App\Structs\Interfaces\Struct;
 /**
  *
  */
-readonly class User implements Struct
+final readonly class User implements Struct
 {
     public const array ROLES = ['Standard', 'Admin'];
 

@@ -16,16 +16,16 @@ use Exception;
 /**
  *
  */
-readonly class Task implements Struct
+final readonly class Task implements Struct
 {
     public const array PRIORITIES = ['Cold', 'Warm', 'Hot', 'Urgent'];
     public const array SIZES = ['Short', 'Tall', 'Grande', 'Venti', 'Big Gulp'];
     public const array STATUSES = [
         'Waiting',
+        'Paused',
         'In Progress',
         'Completed',
         'Split',
-        'Paused'
     ];
 
     /**
@@ -76,8 +76,8 @@ readonly class Task implements Struct
             $row['priority'],
             $row['size'],
             $row['status'],
-            $row['begun_at'],
-            $row['completed_at'],
+            (!empty($row['begun_at'])) ? $row['begun_at'] : null,
+            (!empty($row['completed_at'])) ? $row['completed_at'] : null,
             $row['timezone']
         );
     }
