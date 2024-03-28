@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // Detect environment
 $_ENV['APP_ENV'] ??= $_SERVER['APP_ENV'] ?? 'dev';
 

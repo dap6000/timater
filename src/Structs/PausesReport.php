@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Structs;
 
 use App\Services\TimeZoneService;
 use App\Structs\Exceptions\InvalidTimeZoneException;
 use App\Structs\Interfaces\Struct;
 use DateTimeZone;
+use Exception;
 
+/**
+ *
+ */
 class PausesReport implements Struct
 {
-
     /**
      * @param int $taskId
      * @param string $description
@@ -43,7 +48,11 @@ class PausesReport implements Struct
         }
     }
 
-    public static function fromRow(array $row): Struct
+    /**
+     * @param array $row
+     * @return self
+     */
+    public static function fromRow(array $row): self
     {
         return new PausesReport(
             $row['task_id'],
@@ -61,6 +70,10 @@ class PausesReport implements Struct
         );
     }
 
+    /**
+     * @return array
+     * @throws Exception
+     */
     public function toArray(): array
     {
         $tz = new TimeZoneService();

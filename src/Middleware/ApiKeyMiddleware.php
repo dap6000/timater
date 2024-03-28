@@ -6,7 +6,6 @@ namespace App\Middleware;
 
 use App\Models\UsersModel;
 use Exception;
-use Monolog\Logger;
 use PDO;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

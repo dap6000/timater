@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data;
 
 use App\Data\Interfaces\ConnectionBuilder;
@@ -7,6 +9,9 @@ use App\Data\Traits\Connectable;
 use Exception;
 use PDO;
 
+/**
+ *
+ */
 class AppConnectionBuilder implements ConnectionBuilder
 {
     use Connectable;
@@ -22,6 +27,10 @@ class AppConnectionBuilder implements ConnectionBuilder
         return $this->makePdo($dsn, $user, $password);
     }
 
+    /**
+     * @return array
+     * @throws Exception
+     */
     public function getConnectionDetails(): array
     {
         $host = getenv('MYSQL_APP_HOST');

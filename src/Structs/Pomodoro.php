@@ -94,7 +94,10 @@ final readonly class Pomodoro implements Struct
         return [
             'id' => $this->id,
             'user_id' => $this->userId,
-            'started_at' => $tz->utcToTz($this->startedAt, $this->timezone) ?? '',
+            'started_at' => $tz->utcToTz(
+                    $this->startedAt,
+                    $this->timezone
+                ) ?? '',
             'ended_at' => $tz->utcToTz($this->endedAt, $this->timezone) ?? '',
             'break_duration' => $this->breakDuration,
             'timezone' => $this->timezone

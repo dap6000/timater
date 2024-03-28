@@ -8,7 +8,6 @@ use App\Models\PomodoroModel;
 use App\Models\SettingsModel;
 use App\Structs\Pomodoro;
 use Exception;
-use PDO;
 
 /**
  *

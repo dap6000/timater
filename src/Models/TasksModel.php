@@ -163,13 +163,6 @@ class TasksModel extends Model
         }
         $tz = new TimeZoneService();
         $utcTime = $tz->tzToUtc($time, $timezone);
-        $sql = SQL::BEGINTASK;
-        $params = [
-            ':id' => $id,
-            ':user_id' => $userId,
-            ':begun_at' => $utcTime,
-            ':timezone' => $timezone
-        ];
         $beginTaskStmt = $this->pdo->prepare(query: SQL::BEGINTASK);
         $beginTaskStmt->execute(
             params: [
@@ -250,7 +243,7 @@ class TasksModel extends Model
             )
         ) {
             throw new Exception(
-                message:'Can only assigned a paused or waiting tasks.'
+                message: 'Can only assigned a paused or waiting tasks.'
             );
         }
         $activeTaskStmt = $this->pdo->prepare(query: SQL::UPSERTACTIVETASK);

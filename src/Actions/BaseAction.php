@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Models\DB;
 use Exception;
-use Monolog\Logger;
 use PDO;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -16,6 +14,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 abstract class BaseAction implements Interfaces\Invokable
 {
+    /**
+     * @param PDO $pdo
+     */
     public function __construct(protected PDO $pdo)
     {
     }
@@ -39,7 +40,8 @@ abstract class BaseAction implements Interfaces\Invokable
         try {
             $this->pdo->beginTransaction();
             $json = json_encode(
-                ['data' =>
+                [
+                    'data' =>
                         $this->getData(
                             userId: $userId,
                             body: $body,

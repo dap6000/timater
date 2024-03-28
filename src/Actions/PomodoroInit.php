@@ -8,7 +8,6 @@ use App\Models\PomodoroModel;
 use App\Models\SettingsModel;
 use App\Models\TasksModel;
 use Exception;
-use PDO;
 
 /**
  *
@@ -27,8 +26,10 @@ final class PomodoroInit extends BaseAction
         array $body,
         array $args,
     ): array {
-        $pomodoro = (new PomodoroModel($this->pdo))->getCurrent(userId: $userId);
-        $settings = (new SettingsModel($this->pdo))->getCurrent(userId: $userId);
+        $pomodoro = (new PomodoroModel($this->pdo))
+            ->getCurrent(userId: $userId);
+        $settings = (new SettingsModel($this->pdo))
+            ->getCurrent(userId: $userId);
         $tasksModel = new TasksModel($this->pdo);
         $activeTask = $tasksModel->getActive(userId: $userId);
         $availableTasks = $tasksModel->getAvailable(userId: $userId);

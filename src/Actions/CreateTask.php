@@ -8,7 +8,6 @@ use App\Models\SettingsModel;
 use App\Models\TasksModel;
 use App\Structs\Task;
 use Exception;
-use PDO;
 
 /**
  *
@@ -27,7 +26,8 @@ final class CreateTask extends BaseAction
         array $body,
         array $args,
     ): array {
-        $setting = (new SettingsModel(pdo: $this->pdo))->getCurrent(userId: $userId);
+        $setting = (new SettingsModel(pdo: $this->pdo))
+            ->getCurrent(userId: $userId);
         $newTask = Task::fromRequest(
             $body['task'],
             $body['user'],

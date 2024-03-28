@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use Exception;
-use PDO;
 
 /**
  *

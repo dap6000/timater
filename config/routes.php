@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // Define app routes
 
 use App\Actions\AssignTask;
@@ -28,7 +30,6 @@ use Psr\Log\LoggerInterface;
 use Slim\App;
 
 return function (App $app) {
-
     // Instantiating here for adding to specific routes.
     $apiKeyMiddleware = new ApiKeyMiddleware(
         $app->getContainer()?->get(PDO::class)

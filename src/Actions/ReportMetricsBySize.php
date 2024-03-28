@@ -1,14 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions;
 
-use App\Actions\BaseAction;
 use App\Models\ReportsModel;
 use App\Models\UsersModel;
 use App\Services\TimeZoneService;
+use Exception;
 
+/**
+ *
+ */
 class ReportMetricsBySize extends BaseAction
 {
+    /**
+     * @param int $userId
+     * @param array $body
+     * @param array $args
+     * @return array
+     * @throws Exception
+     */
     public function getData(
         int $userId,
         array $body,

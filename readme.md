@@ -149,13 +149,33 @@ improvements.
 
 Where our Composer managed dependencies are built and auto-loaded from.
 
-
 ## Code Standards
 
 I've set up basic configurations for PHP Code Sniffer, PHP Mess Detector,
 Psalm, PHPStan. I've also enabled PSR-12 inspections in PHP Storm. I'm
 using PHP 8.3. And I've included a basic .editorconfig file to describe
 the code styles I'm using.
+
+## Regrets
+
+No project is truly finished. It escapes. I've worked on this off and on
+for a week now. And it's been a busy week. My wife is out of town and I've
+been responsible for getting two kids (technically young adults) to school
+(the community college 45 minutes from our house) and back. So of course
+there's lots of stuff in here I'm unhappy with.
+
+Any real API would need to use https everywhere. But I figure this is a
+demo that will only ever run locally. There's no actual authentication.
+Pull an API key out of the schema file and you can do anything that key
+allows. Without https the key is sent plain text. But if it's only ever
+running on localhost can there really be man in the middle? There's no
+cross site request forgery prevention. And there's even an official module
+from the Slim project to help with that. But this app doesn't even use
+sessions so there's not much to hijack. You either have the key or you don't.
+
+Hopefully there's enough here to get a sense of my approach to database schema
+and API design. And maybe a sense of how I write code when allowed to work
+in modern PHP.
 
 ## Available Actions
 
@@ -289,18 +309,18 @@ Example Response Body:
 
 ```json
 {
-  "data": {
-    "settings": {
-      "session_duration": 30,
-      "short_rest_duration": 5,
-      "long_rest_duration": 20,
-      "long_rest_threshold": 4,
-      "rock_breaking_threshold": 3,
-      "use_task_priority": true,
-      "use_task_size": true,
-      "timezone": "America/Chicago"
+    "data": {
+        "settings": {
+            "session_duration": 30,
+            "short_rest_duration": 5,
+            "long_rest_duration": 20,
+            "long_rest_threshold": 4,
+            "rock_breaking_threshold": 3,
+            "use_task_priority": true,
+            "use_task_size": true,
+            "timezone": "America/Chicago"
+        }
     }
-  }
 }
 ```
 
@@ -316,16 +336,16 @@ Example Request Body
 
 ```json
 {
-  "settings": {
-    "session_duration": 30,
-    "short_rest_duration": 5,
-    "long_rest_duration": 20,
-    "long_rest_threshold": 4,
-    "rock_breaking_threshold": 3,
-    "use_task_priority": true,
-    "use_task_size": true,
-    "timezone": "America/Chicago"
-  }
+    "settings": {
+        "session_duration": 30,
+        "short_rest_duration": 5,
+        "long_rest_duration": 20,
+        "long_rest_threshold": 4,
+        "rock_breaking_threshold": 3,
+        "use_task_priority": true,
+        "use_task_size": true,
+        "timezone": "America/Chicago"
+    }
 }
 ```
 
@@ -333,18 +353,18 @@ Example Response Body:
 
 ```json
 {
-  "data": {
-    "settings": {
-      "session_duration": 30,
-      "short_rest_duration": 5,
-      "long_rest_duration": 20,
-      "long_rest_threshold": 4,
-      "rock_breaking_threshold": 3,
-      "use_task_priority": true,
-      "use_task_size": true,
-      "timezone": "America/Chicago"
+    "data": {
+        "settings": {
+            "session_duration": 30,
+            "short_rest_duration": 5,
+            "long_rest_duration": 20,
+            "long_rest_threshold": 4,
+            "rock_breaking_threshold": 3,
+            "use_task_priority": true,
+            "use_task_size": true,
+            "timezone": "America/Chicago"
+        }
     }
-  }
 }
 ```
 
@@ -361,12 +381,12 @@ Example Request Body:
 
 ```json
 {
-  "task": {
-    "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
-    "priority": "Urgent",
-    "size": "Big Gulp",
-    "timezone": "America/Chicago"
-  }
+    "task": {
+        "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
+        "priority": "Urgent",
+        "size": "Big Gulp",
+        "timezone": "America/Chicago"
+    }
 }
 ```
 
@@ -376,18 +396,18 @@ Example Response Body:
 
 ```json
 {
-  "data": {
-    "task": {
-      "id": 284,
-      "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
-      "priority": "Urgent",
-      "size": "Big Gulp",
-      "status": "Waiting",
-      "begun_at": null,
-      "completed_at": null,
-      "timezone": "America/Chicago"
+    "data": {
+        "task": {
+            "id": 284,
+            "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
+            "priority": "Urgent",
+            "size": "Big Gulp",
+            "status": "Waiting",
+            "begun_at": null,
+            "completed_at": null,
+            "timezone": "America/Chicago"
+        }
     }
-  }
 }
 ```
 
@@ -403,12 +423,12 @@ Example Request Body
 
 ```json
 {
-  "task": {
-    "id": 230,
-    "description": "New task description.",
-    "priority": "Hot",
-    "size": "Grande"
-  }
+    "task": {
+        "id": 230,
+        "description": "New task description.",
+        "priority": "Hot",
+        "size": "Grande"
+    }
 }
 ```
 
@@ -416,18 +436,18 @@ Example Response Body:
 
 ```json
 {
-  "data": {
-    "task": {
-      "id": 230,
-      "description": "New task description.",
-      "priority": "Hot",
-      "size": "Grande",
-      "status": "Completed",
-      "begun_at": "2024-03-15 09:05:52",
-      "completed_at": "2024-03-15 10:03:52",
-      "timezone": "America/Chicago"
+    "data": {
+        "task": {
+            "id": 230,
+            "description": "New task description.",
+            "priority": "Hot",
+            "size": "Grande",
+            "status": "Completed",
+            "begun_at": "2024-03-15 09:05:52",
+            "completed_at": "2024-03-15 10:03:52",
+            "timezone": "America/Chicago"
+        }
     }
-  }
 }
 ```
 
@@ -451,26 +471,26 @@ Example Request Body
 
 ```json
 {
-  "children": [
-    {
-      "description": "New Child Task 1",
-      "priority": "Hot",
-      "size": "Grande",
-      "timezone": "America/Chicago"
-    },
-    {
-      "description": "New Child Task 2",
-      "priority": "Warm",
-      "size": "Tall",
-      "timezone": "America/Chicago"
-    },
-    {
-      "description": "New Child Task 3",
-      "priority": "Cold",
-      "size": "Short",
-      "timezone": "America/Chicago"
-    }
-  ]
+    "children": [
+        {
+            "description": "New Child Task 1",
+            "priority": "Hot",
+            "size": "Grande",
+            "timezone": "America/Chicago"
+        },
+        {
+            "description": "New Child Task 2",
+            "priority": "Warm",
+            "size": "Tall",
+            "timezone": "America/Chicago"
+        },
+        {
+            "description": "New Child Task 3",
+            "priority": "Cold",
+            "size": "Short",
+            "timezone": "America/Chicago"
+        }
+    ]
 }
 ```
 
@@ -478,252 +498,252 @@ Example Response Body:
 
 ```json
 {
-  "data": {
-    "parent": {
-      "id": 239,
-      "userId": 3,
-      "description": "Dicta iure hic facere.",
-      "priority": "Warm",
-      "size": "Grande",
-      "status": "Split",
-      "begunAt": "2024-03-19 10:50:43",
-      "completedAt": "2024-03-19 12:56:43",
-      "timezone": "America/Chicago"
-    },
-    "children": [
-      {
-        "id": 257,
-        "userId": 3,
-        "description": "New Child Task 1",
-        "priority": "Hot",
-        "size": "Grande",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 258,
-        "userId": 3,
-        "description": "New Child Task 2",
-        "priority": "Warm",
-        "size": "Tall",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 259,
-        "userId": 3,
-        "description": "New Child Task 3",
-        "priority": "Cold",
-        "size": "Short",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 261,
-        "userId": 3,
-        "description": "New Child Task 1",
-        "priority": "Hot",
-        "size": "Grande",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 262,
-        "userId": 3,
-        "description": "New Child Task 2",
-        "priority": "Warm",
-        "size": "Tall",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 263,
-        "userId": 3,
-        "description": "New Child Task 3",
-        "priority": "Cold",
-        "size": "Short",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 265,
-        "userId": 3,
-        "description": "New Child Task 1",
-        "priority": "Hot",
-        "size": "Grande",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 266,
-        "userId": 3,
-        "description": "New Child Task 2",
-        "priority": "Warm",
-        "size": "Tall",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 267,
-        "userId": 3,
-        "description": "New Child Task 3",
-        "priority": "Cold",
-        "size": "Short",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 277,
-        "userId": 3,
-        "description": "New Child Task 1",
-        "priority": "Hot",
-        "size": "Grande",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 278,
-        "userId": 3,
-        "description": "New Child Task 2",
-        "priority": "Warm",
-        "size": "Tall",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 279,
-        "userId": 3,
-        "description": "New Child Task 3",
-        "priority": "Cold",
-        "size": "Short",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 280,
-        "userId": 3,
-        "description": "New Child Task 1",
-        "priority": "Hot",
-        "size": "Grande",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 281,
-        "userId": 3,
-        "description": "New Child Task 2",
-        "priority": "Warm",
-        "size": "Tall",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 282,
-        "userId": 3,
-        "description": "New Child Task 3",
-        "priority": "Cold",
-        "size": "Short",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 285,
-        "userId": 3,
-        "description": "New Child Task 1",
-        "priority": "Hot",
-        "size": "Grande",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 286,
-        "userId": 3,
-        "description": "New Child Task 2",
-        "priority": "Warm",
-        "size": "Tall",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 287,
-        "userId": 3,
-        "description": "New Child Task 3",
-        "priority": "Cold",
-        "size": "Short",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 288,
-        "userId": 3,
-        "description": "New Child Task 1",
-        "priority": "Hot",
-        "size": "Grande",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 289,
-        "userId": 3,
-        "description": "New Child Task 2",
-        "priority": "Warm",
-        "size": "Tall",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 290,
-        "userId": 3,
-        "description": "New Child Task 3",
-        "priority": "Cold",
-        "size": "Short",
-        "status": "Waiting",
-        "begunAt": null,
-        "completedAt": null,
-        "timezone": "America/Chicago"
-      }
-    ]
-  }
+    "data": {
+        "parent": {
+            "id": 239,
+            "userId": 3,
+            "description": "Dicta iure hic facere.",
+            "priority": "Warm",
+            "size": "Grande",
+            "status": "Split",
+            "begunAt": "2024-03-19 10:50:43",
+            "completedAt": "2024-03-19 12:56:43",
+            "timezone": "America/Chicago"
+        },
+        "children": [
+            {
+                "id": 257,
+                "userId": 3,
+                "description": "New Child Task 1",
+                "priority": "Hot",
+                "size": "Grande",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 258,
+                "userId": 3,
+                "description": "New Child Task 2",
+                "priority": "Warm",
+                "size": "Tall",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 259,
+                "userId": 3,
+                "description": "New Child Task 3",
+                "priority": "Cold",
+                "size": "Short",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 261,
+                "userId": 3,
+                "description": "New Child Task 1",
+                "priority": "Hot",
+                "size": "Grande",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 262,
+                "userId": 3,
+                "description": "New Child Task 2",
+                "priority": "Warm",
+                "size": "Tall",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 263,
+                "userId": 3,
+                "description": "New Child Task 3",
+                "priority": "Cold",
+                "size": "Short",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 265,
+                "userId": 3,
+                "description": "New Child Task 1",
+                "priority": "Hot",
+                "size": "Grande",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 266,
+                "userId": 3,
+                "description": "New Child Task 2",
+                "priority": "Warm",
+                "size": "Tall",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 267,
+                "userId": 3,
+                "description": "New Child Task 3",
+                "priority": "Cold",
+                "size": "Short",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 277,
+                "userId": 3,
+                "description": "New Child Task 1",
+                "priority": "Hot",
+                "size": "Grande",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 278,
+                "userId": 3,
+                "description": "New Child Task 2",
+                "priority": "Warm",
+                "size": "Tall",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 279,
+                "userId": 3,
+                "description": "New Child Task 3",
+                "priority": "Cold",
+                "size": "Short",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 280,
+                "userId": 3,
+                "description": "New Child Task 1",
+                "priority": "Hot",
+                "size": "Grande",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 281,
+                "userId": 3,
+                "description": "New Child Task 2",
+                "priority": "Warm",
+                "size": "Tall",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 282,
+                "userId": 3,
+                "description": "New Child Task 3",
+                "priority": "Cold",
+                "size": "Short",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 285,
+                "userId": 3,
+                "description": "New Child Task 1",
+                "priority": "Hot",
+                "size": "Grande",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 286,
+                "userId": 3,
+                "description": "New Child Task 2",
+                "priority": "Warm",
+                "size": "Tall",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 287,
+                "userId": 3,
+                "description": "New Child Task 3",
+                "priority": "Cold",
+                "size": "Short",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 288,
+                "userId": 3,
+                "description": "New Child Task 1",
+                "priority": "Hot",
+                "size": "Grande",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 289,
+                "userId": 3,
+                "description": "New Child Task 2",
+                "priority": "Warm",
+                "size": "Tall",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 290,
+                "userId": 3,
+                "description": "New Child Task 3",
+                "priority": "Cold",
+                "size": "Short",
+                "status": "Waiting",
+                "begunAt": null,
+                "completedAt": null,
+                "timezone": "America/Chicago"
+            }
+        ]
+    }
 }
 ```
 
@@ -741,60 +761,60 @@ Example Response Body:
 
 ```json
 {
-  "data": {
-    "tasks": [
-      {
-        "id": 123,
-        "description": "Ad corporis iste incidunt officia qui error.",
-        "priority": "Warm",
-        "size": "Big Gulp",
-        "status": "Paused",
-        "begun_at": "2024-02-14 14:56:15",
-        "completed_at": "2024-02-15 11:06:15",
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 256,
-        "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
-        "priority": "Urgent",
-        "size": "Big Gulp",
-        "status": "Waiting",
-        "begun_at": null,
-        "completed_at": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 257,
-        "description": "New Child Task 1",
-        "priority": "Hot",
-        "size": "Grande",
-        "status": "Waiting",
-        "begun_at": null,
-        "completed_at": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 258,
-        "description": "New Child Task 2",
-        "priority": "Warm",
-        "size": "Tall",
-        "status": "Waiting",
-        "begun_at": null,
-        "completed_at": null,
-        "timezone": "America/Chicago"
-      },
-      {
-        "id": 259,
-        "description": "New Child Task 3",
-        "priority": "Cold",
-        "size": "Short",
-        "status": "Waiting",
-        "begun_at": null,
-        "completed_at": null,
-        "timezone": "America/Chicago"
-      }
-    ]
-  }
+    "data": {
+        "tasks": [
+            {
+                "id": 123,
+                "description": "Ad corporis iste incidunt officia qui error.",
+                "priority": "Warm",
+                "size": "Big Gulp",
+                "status": "Paused",
+                "begun_at": "2024-02-14 14:56:15",
+                "completed_at": "2024-02-15 11:06:15",
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 256,
+                "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
+                "priority": "Urgent",
+                "size": "Big Gulp",
+                "status": "Waiting",
+                "begun_at": null,
+                "completed_at": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 257,
+                "description": "New Child Task 1",
+                "priority": "Hot",
+                "size": "Grande",
+                "status": "Waiting",
+                "begun_at": null,
+                "completed_at": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 258,
+                "description": "New Child Task 2",
+                "priority": "Warm",
+                "size": "Tall",
+                "status": "Waiting",
+                "begun_at": null,
+                "completed_at": null,
+                "timezone": "America/Chicago"
+            },
+            {
+                "id": 259,
+                "description": "New Child Task 3",
+                "priority": "Cold",
+                "size": "Short",
+                "status": "Waiting",
+                "begun_at": null,
+                "completed_at": null,
+                "timezone": "America/Chicago"
+            }
+        ]
+    }
 }
 ```
 
@@ -922,19 +942,19 @@ Example Response Body:
 
 ```json
 {
-  "data": {
-    "task": {
-      "id": 284,
-      "userId": 3,
-      "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
-      "priority": "Urgent",
-      "size": "Big Gulp",
-      "status": "Completed",
-      "begunAt": "2024-03-25 21:05:52",
-      "completedAt": "2024-03-25 21:05:52",
-      "timezone": "America/Chicago"
+    "data": {
+        "task": {
+            "id": 284,
+            "userId": 3,
+            "description": "Detention block A A-twenty-three. I'm afraid she's scheduled to be terminated. Oh, no!",
+            "priority": "Urgent",
+            "size": "Big Gulp",
+            "status": "Completed",
+            "begunAt": "2024-03-25 21:05:52",
+            "completedAt": "2024-03-25 21:05:52",
+            "timezone": "America/Chicago"
+        }
     }
-  }
 }
 ```
 
@@ -1071,23 +1091,24 @@ Method: GET
 Sample request body: none
 
 Sample response body:
+
 ```json
 {
-  "data": {
-    "report": [
-      {
-        "taskId": 179,
-        "sessionCount": 6,
-        "description": "Minus voluptatem perspiciatis laborum quaerat.",
-        "priority": "Urgent",
-        "size": "Big Gulp",
-        "status": "In Progress",
-        "begunAt": "2024-02-28 15:31:14",
-        "completedAt": "2024-02-29 10:11:14",
-        "timezone": "America/Chicago"
-      }
-    ]
-  }
+    "data": {
+        "report": [
+            {
+                "taskId": 179,
+                "sessionCount": 6,
+                "description": "Minus voluptatem perspiciatis laborum quaerat.",
+                "priority": "Urgent",
+                "size": "Big Gulp",
+                "status": "In Progress",
+                "begunAt": "2024-02-28 15:31:14",
+                "completedAt": "2024-02-29 10:11:14",
+                "timezone": "America/Chicago"
+            }
+        ]
+    }
 }
 ```
 
@@ -1103,63 +1124,64 @@ Method: GET
 Sample request body: none
 
 Sample response body:
+
 ```json
 {
-  "data": {
-    "report": [
-      {
-        "split": {
-          "num_new_tasks": 3,
-          "parent": {
-            "id": 231,
-            "userId": 3,
-            "description": "Quidem enim qui voluptas et doloribus.",
-            "priority": "Warm",
-            "size": "Short",
-            "status": "Split",
-            "begunAt": "2024-03-15 10:03:58",
-            "completedAt": "2024-03-15 10:13:58",
-            "timezone": "America/Chicago"
-          },
-          "children": [
+    "data": {
+        "report": [
             {
-              "id": 257,
-              "userId": 3,
-              "description": "New Child Task 1",
-              "priority": "Hot",
-              "size": "Grande",
-              "status": "Waiting",
-              "begunAt": null,
-              "completedAt": null,
-              "timezone": "America/Chicago"
-            },
-            {
-              "id": 258,
-              "userId": 3,
-              "description": "New Child Task 2",
-              "priority": "Warm",
-              "size": "Tall",
-              "status": "Waiting",
-              "begunAt": null,
-              "completedAt": null,
-              "timezone": "America/Chicago"
-            },
-            {
-              "id": 259,
-              "userId": 3,
-              "description": "New Child Task 3",
-              "priority": "Cold",
-              "size": "Short",
-              "status": "Waiting",
-              "begunAt": null,
-              "completedAt": null,
-              "timezone": "America/Chicago"
+                "split": {
+                    "num_new_tasks": 3,
+                    "parent": {
+                        "id": 231,
+                        "userId": 3,
+                        "description": "Quidem enim qui voluptas et doloribus.",
+                        "priority": "Warm",
+                        "size": "Short",
+                        "status": "Split",
+                        "begunAt": "2024-03-15 10:03:58",
+                        "completedAt": "2024-03-15 10:13:58",
+                        "timezone": "America/Chicago"
+                    },
+                    "children": [
+                        {
+                            "id": 257,
+                            "userId": 3,
+                            "description": "New Child Task 1",
+                            "priority": "Hot",
+                            "size": "Grande",
+                            "status": "Waiting",
+                            "begunAt": null,
+                            "completedAt": null,
+                            "timezone": "America/Chicago"
+                        },
+                        {
+                            "id": 258,
+                            "userId": 3,
+                            "description": "New Child Task 2",
+                            "priority": "Warm",
+                            "size": "Tall",
+                            "status": "Waiting",
+                            "begunAt": null,
+                            "completedAt": null,
+                            "timezone": "America/Chicago"
+                        },
+                        {
+                            "id": 259,
+                            "userId": 3,
+                            "description": "New Child Task 3",
+                            "priority": "Cold",
+                            "size": "Short",
+                            "status": "Waiting",
+                            "begunAt": null,
+                            "completedAt": null,
+                            "timezone": "America/Chicago"
+                        }
+                    ]
+                }
             }
-          ]
-        }
-      }
-    ]
-  }
+        ]
+    }
 }
 ```
 
@@ -1174,40 +1196,41 @@ Method: GET
 Sample request body: none
 
 Sample response body:
+
 ```json
 {
-  "data": {
-    "report": [
-      {
-        "taskId": 123,
-        "description": "Ad corporis iste incidunt officia qui error.",
-        "priority": "Warm",
-        "size": "Big Gulp",
-        "status": "Paused",
-        "begunAt": "2024-02-14 14:56:15",
-        "completedAt": "2024-02-15 11:06:15",
-        "timezone": "America/Chicago",
-        "totalPauses": 5,
-        "totalSeconds": 600,
-        "totalMinutes": 10,
-        "totalHours": 0.16666667
-      },
-      {
-        "taskId": 179,
-        "description": "Minus voluptatem perspiciatis laborum quaerat.",
-        "priority": "Urgent",
-        "size": "Big Gulp",
-        "status": "In Progress",
-        "begunAt": "2024-02-28 15:31:14",
-        "completedAt": "2024-02-29 10:11:14",
-        "timezone": "America/Chicago",
-        "totalPauses": 5,
-        "totalSeconds": 2580,
-        "totalMinutes": 43,
-        "totalHours": 0.71666667
-      }
-    ]
-  }
+    "data": {
+        "report": [
+            {
+                "taskId": 123,
+                "description": "Ad corporis iste incidunt officia qui error.",
+                "priority": "Warm",
+                "size": "Big Gulp",
+                "status": "Paused",
+                "begunAt": "2024-02-14 14:56:15",
+                "completedAt": "2024-02-15 11:06:15",
+                "timezone": "America/Chicago",
+                "totalPauses": 5,
+                "totalSeconds": 600,
+                "totalMinutes": 10,
+                "totalHours": 0.16666667
+            },
+            {
+                "taskId": 179,
+                "description": "Minus voluptatem perspiciatis laborum quaerat.",
+                "priority": "Urgent",
+                "size": "Big Gulp",
+                "status": "In Progress",
+                "begunAt": "2024-02-28 15:31:14",
+                "completedAt": "2024-02-29 10:11:14",
+                "timezone": "America/Chicago",
+                "totalPauses": 5,
+                "totalSeconds": 2580,
+                "totalMinutes": 43,
+                "totalHours": 0.71666667
+            }
+        ]
+    }
 }
 ```
 
@@ -1222,6 +1245,7 @@ Endpoint: `/reports/metrics/priority` or `/reports/metrics/priority/{id}}`
 Method: GET
 
 Sample request body:
+
 ```json
 {
     "start": "2024-01-25",
@@ -1231,70 +1255,71 @@ Sample request body:
 ```
 
 Sample response body:
+
 ```json
 {
-  "data": [
-    {
-      "priority": "Urgent",
-      "avg_create_to_start": "2703537.1915",
-      "avg_create_to_complete": "2685307.4043",
-      "avg_begun_to_completed": "18229.7872",
-      "avg_session_count": "1.0000",
-      "max_create_to_start": 5325675,
-      "max_create_to_complete": 5314035,
-      "max_begun_to_completed": 240480,
-      "max_session_count": 1,
-      "min_create_to_start": 468138,
-      "min_create_to_complete": 467778,
-      "min_begun_to_completed": 300,
-      "min_session_count": 1
-    },
-    {
-      "priority": "Hot",
-      "avg_create_to_start": "2714543.1887",
-      "avg_create_to_complete": "2630156.6792",
-      "avg_begun_to_completed": "84386.5094",
-      "avg_session_count": "1.0000",
-      "max_create_to_start": 5313993,
-      "max_create_to_complete": 5310753,
-      "max_begun_to_completed": 3405565,
-      "max_session_count": 1,
-      "min_create_to_start": 399519,
-      "min_create_to_complete": 96431,
-      "min_begun_to_completed": 300,
-      "min_session_count": 1
-    },
-    {
-      "priority": "Cold",
-      "avg_create_to_start": "2996104.3111",
-      "avg_create_to_complete": "2976464.3111",
-      "avg_begun_to_completed": "19640.0000",
-      "avg_session_count": "1.0000",
-      "max_create_to_start": 5310697,
-      "max_create_to_complete": 5302597,
-      "max_begun_to_completed": 245400,
-      "max_session_count": 1,
-      "min_create_to_start": 402530,
-      "min_create_to_complete": 401990,
-      "min_begun_to_completed": 300,
-      "min_session_count": 1
-    },
-    {
-      "priority": "Warm",
-      "avg_create_to_start": "2808229.5556",
-      "avg_create_to_complete": "2770244.2222",
-      "avg_begun_to_completed": "37985.3333",
-      "avg_session_count": "1.0000",
-      "max_create_to_start": 5302588,
-      "max_create_to_complete": 5228188,
-      "max_begun_to_completed": 246900,
-      "max_session_count": 1,
-      "min_create_to_start": 380282,
-      "min_create_to_complete": 373562,
-      "min_begun_to_completed": 300,
-      "min_session_count": 1
-    }
-  ]
+    "data": [
+        {
+            "priority": "Urgent",
+            "avg_create_to_start": "2703537.1915",
+            "avg_create_to_complete": "2685307.4043",
+            "avg_begun_to_completed": "18229.7872",
+            "avg_session_count": "1.0000",
+            "max_create_to_start": 5325675,
+            "max_create_to_complete": 5314035,
+            "max_begun_to_completed": 240480,
+            "max_session_count": 1,
+            "min_create_to_start": 468138,
+            "min_create_to_complete": 467778,
+            "min_begun_to_completed": 300,
+            "min_session_count": 1
+        },
+        {
+            "priority": "Hot",
+            "avg_create_to_start": "2714543.1887",
+            "avg_create_to_complete": "2630156.6792",
+            "avg_begun_to_completed": "84386.5094",
+            "avg_session_count": "1.0000",
+            "max_create_to_start": 5313993,
+            "max_create_to_complete": 5310753,
+            "max_begun_to_completed": 3405565,
+            "max_session_count": 1,
+            "min_create_to_start": 399519,
+            "min_create_to_complete": 96431,
+            "min_begun_to_completed": 300,
+            "min_session_count": 1
+        },
+        {
+            "priority": "Cold",
+            "avg_create_to_start": "2996104.3111",
+            "avg_create_to_complete": "2976464.3111",
+            "avg_begun_to_completed": "19640.0000",
+            "avg_session_count": "1.0000",
+            "max_create_to_start": 5310697,
+            "max_create_to_complete": 5302597,
+            "max_begun_to_completed": 245400,
+            "max_session_count": 1,
+            "min_create_to_start": 402530,
+            "min_create_to_complete": 401990,
+            "min_begun_to_completed": 300,
+            "min_session_count": 1
+        },
+        {
+            "priority": "Warm",
+            "avg_create_to_start": "2808229.5556",
+            "avg_create_to_complete": "2770244.2222",
+            "avg_begun_to_completed": "37985.3333",
+            "avg_session_count": "1.0000",
+            "max_create_to_start": 5302588,
+            "max_create_to_complete": 5228188,
+            "max_begun_to_completed": 246900,
+            "max_session_count": 1,
+            "min_create_to_start": 380282,
+            "min_create_to_complete": 373562,
+            "min_begun_to_completed": 300,
+            "min_session_count": 1
+        }
+    ]
 }
 ```
 
@@ -1309,6 +1334,7 @@ Endpoint: `/reports/metrics/size` or `/reports/metrics/size/{id}}`
 Method: GET
 
 Sample request body:
+
 ```json
 {
     "start": "2024-01-25",
@@ -1318,85 +1344,86 @@ Sample request body:
 ```
 
 Sample response body:
+
 ```json
 {
-  "data": [
-    {
-      "size": "Venti",
-      "avg_create_to_start": "2890092.9643",
-      "avg_create_to_complete": "2839570.8214",
-      "avg_begun_to_completed": "50522.1429",
-      "avg_session_count": "1.0000",
-      "max_create_to_start": 5325675,
-      "max_create_to_complete": 5314035,
-      "max_begun_to_completed": 242400,
-      "max_session_count": 1,
-      "min_create_to_start": 399519,
-      "min_create_to_complete": 386079,
-      "min_begun_to_completed": 5700,
-      "min_session_count": 1
-    },
-    {
-      "size": "Tall",
-      "avg_create_to_start": "2889406.6458",
-      "avg_create_to_complete": "2882076.6458",
-      "avg_begun_to_completed": "7330.0000",
-      "avg_session_count": "1.0000",
-      "max_create_to_start": 5313993,
-      "max_create_to_complete": 5310753,
-      "max_begun_to_completed": 59400,
-      "max_session_count": 1,
-      "min_create_to_start": 401982,
-      "min_create_to_complete": 399522,
-      "min_begun_to_completed": 1200,
-      "min_session_count": 1
-    },
-    {
-      "size": "Grande",
-      "avg_create_to_start": "2609698.5714",
-      "avg_create_to_complete": "2600813.4286",
-      "avg_begun_to_completed": "8885.1429",
-      "avg_session_count": "1.0000",
-      "max_create_to_start": 5310697,
-      "max_create_to_complete": 5302597,
-      "max_begun_to_completed": 63000,
-      "max_session_count": 1,
-      "min_create_to_start": 380282,
-      "min_create_to_complete": 373562,
-      "min_begun_to_completed": 3000,
-      "min_session_count": 1
-    },
-    {
-      "size": "Big Gulp",
-      "avg_create_to_start": "2903499.9706",
-      "avg_create_to_complete": "2835902.9118",
-      "avg_begun_to_completed": "67597.0588",
-      "avg_session_count": "1.0000",
-      "max_create_to_start": 5302588,
-      "max_create_to_complete": 5228188,
-      "max_begun_to_completed": 250500,
-      "max_session_count": 1,
-      "min_create_to_start": 550206,
-      "min_create_to_complete": 481206,
-      "min_begun_to_completed": 10500,
-      "min_session_count": 1
-    },
-    {
-      "size": "Short",
-      "avg_create_to_start": "2721322.0000",
-      "avg_create_to_complete": "2642506.7778",
-      "avg_begun_to_completed": "78815.2222",
-      "avg_session_count": "1.0000",
-      "max_create_to_start": 4970395,
-      "max_create_to_complete": 4969495,
-      "max_begun_to_completed": 3405565,
-      "max_session_count": 1,
-      "min_create_to_start": 402530,
-      "min_create_to_complete": 96431,
-      "min_begun_to_completed": 300,
-      "min_session_count": 1
-    }
-  ]
+    "data": [
+        {
+            "size": "Venti",
+            "avg_create_to_start": "2890092.9643",
+            "avg_create_to_complete": "2839570.8214",
+            "avg_begun_to_completed": "50522.1429",
+            "avg_session_count": "1.0000",
+            "max_create_to_start": 5325675,
+            "max_create_to_complete": 5314035,
+            "max_begun_to_completed": 242400,
+            "max_session_count": 1,
+            "min_create_to_start": 399519,
+            "min_create_to_complete": 386079,
+            "min_begun_to_completed": 5700,
+            "min_session_count": 1
+        },
+        {
+            "size": "Tall",
+            "avg_create_to_start": "2889406.6458",
+            "avg_create_to_complete": "2882076.6458",
+            "avg_begun_to_completed": "7330.0000",
+            "avg_session_count": "1.0000",
+            "max_create_to_start": 5313993,
+            "max_create_to_complete": 5310753,
+            "max_begun_to_completed": 59400,
+            "max_session_count": 1,
+            "min_create_to_start": 401982,
+            "min_create_to_complete": 399522,
+            "min_begun_to_completed": 1200,
+            "min_session_count": 1
+        },
+        {
+            "size": "Grande",
+            "avg_create_to_start": "2609698.5714",
+            "avg_create_to_complete": "2600813.4286",
+            "avg_begun_to_completed": "8885.1429",
+            "avg_session_count": "1.0000",
+            "max_create_to_start": 5310697,
+            "max_create_to_complete": 5302597,
+            "max_begun_to_completed": 63000,
+            "max_session_count": 1,
+            "min_create_to_start": 380282,
+            "min_create_to_complete": 373562,
+            "min_begun_to_completed": 3000,
+            "min_session_count": 1
+        },
+        {
+            "size": "Big Gulp",
+            "avg_create_to_start": "2903499.9706",
+            "avg_create_to_complete": "2835902.9118",
+            "avg_begun_to_completed": "67597.0588",
+            "avg_session_count": "1.0000",
+            "max_create_to_start": 5302588,
+            "max_create_to_complete": 5228188,
+            "max_begun_to_completed": 250500,
+            "max_session_count": 1,
+            "min_create_to_start": 550206,
+            "min_create_to_complete": 481206,
+            "min_begun_to_completed": 10500,
+            "min_session_count": 1
+        },
+        {
+            "size": "Short",
+            "avg_create_to_start": "2721322.0000",
+            "avg_create_to_complete": "2642506.7778",
+            "avg_begun_to_completed": "78815.2222",
+            "avg_session_count": "1.0000",
+            "max_create_to_start": 4970395,
+            "max_create_to_complete": 4969495,
+            "max_begun_to_completed": 3405565,
+            "max_session_count": 1,
+            "min_create_to_start": 402530,
+            "min_create_to_complete": 96431,
+            "min_begun_to_completed": 300,
+            "min_session_count": 1
+        }
+    ]
 }
 ```
 

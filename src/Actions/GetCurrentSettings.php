@@ -6,7 +6,6 @@ namespace App\Actions;
 
 use App\Models\SettingsModel;
 use Exception;
-use PDO;
 
 /**
  *

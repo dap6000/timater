@@ -7,7 +7,6 @@ namespace App\Actions;
 use App\Models\PomodoroModel;
 use App\Models\SettingsModel;
 use Exception;
-use PDO;
 
 /**
  * NOT declared final because it gets extended by Quit

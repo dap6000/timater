@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data;
 
 use App\Data\Interfaces\ConnectionBuilder;
@@ -25,6 +27,10 @@ class TestConnectionBuilder implements ConnectionBuilder
         return $this->makePdo($dsn, $user, $password);
     }
 
+    /**
+     * @return array
+     * @throws Exception
+     */
     public function getConnectionDetails(): array
     {
         $host = getenv('MYSQL_TEST_HOST');

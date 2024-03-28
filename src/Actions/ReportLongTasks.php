@@ -7,13 +7,17 @@ namespace App\Actions;
 use App\Models\ReportsModel;
 use App\Models\SettingsModel;
 use App\Models\UsersModel;
+use Exception;
 
+/**
+ *
+ */
 class ReportLongTasks extends BaseAction
 {
 
     /**
      * @inheritDoc
-     * @throws \Exception
+     * @throws Exception
      */
     public function getData(
         int $userId,

@@ -6,7 +6,6 @@ namespace App\Actions;
 
 use App\Models\TasksModel;
 use Exception;
-use PDO;
 
 /**
  *

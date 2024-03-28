@@ -7,14 +7,12 @@ namespace App\Actions;
 use App\Models\TasksModel;
 use App\Structs\Task;
 use Exception;
-use PDO;
 
 /**
  *
  */
 final class EditTask extends BaseAction
 {
-
     /**
      * @param int $userId
      * @param array $body

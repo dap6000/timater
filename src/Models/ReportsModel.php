@@ -8,6 +8,7 @@ use App\Data\SQL;
 use App\Structs\LongTaskReport;
 use App\Structs\PausesReport;
 use App\Structs\Task;
+use Exception;
 use PDO;
 
 /**
@@ -59,7 +60,12 @@ class ReportsModel extends Model
             : ['report' => 'No paused tasks were found.'];
     }
 
-    public function splitTasks(int $userId)
+    /**
+     * @param int $userId
+     * @return array|string[]
+     * @throws Exception
+     */
+    public function splitTasks(int $userId): array
     {
         $reportStmt = $this->pdo->prepare(query: SQL::SPLITSREPORT);
         $reportStmt->execute(params: [':user_id' => $userId]);
@@ -89,11 +95,19 @@ class ReportsModel extends Model
                 )
             ]
             : ['report' => 'No split tasks were found.'];
-
     }
 
-    public function metricsBySize(int $userId, string $start, string $end)
-    {
+    /**
+     * @param int $userId
+     * @param string $start
+     * @param string $end
+     * @return array|false
+     */
+    public function metricsBySize(
+        int $userId,
+        string $start,
+        string $end
+    ): array|false {
         $reportStmt = $this->pdo->prepare(query: SQL::METRICSBYSIZE);
         $reportStmt->execute(
             params: [
@@ -111,11 +125,14 @@ class ReportsModel extends Model
     /**
      * @param int $userId
      * @param string $start A date or datetime string
-     * @param string $endA date or datetime string
-     * @return array|false
+     * @param string $end
+     * @return array
      */
-    public function metricsByPriority(int $userId, string $start, string $end): array
-    {
+    public function metricsByPriority(
+        int $userId,
+        string $start,
+        string $end
+    ): array {
         $reportStmt = $this->pdo->prepare(query: SQL::METRICSBYPRIORITY);
         $reportStmt->execute(
             params: [
